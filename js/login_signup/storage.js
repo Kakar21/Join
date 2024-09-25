@@ -1,35 +1,47 @@
-
-const STORAGE_TOKEN = '8P6ZMZZXOD1PUSKXJNGCX6Y5OU550K3CS45YN7FK';
-const STORAGE_URL = 'https://remote-storage.developerakademie.org/item';
-
-
 /**
- * Set Datas in the backend
+ * Speichert Daten in Firestore unter dem angegebenen Schlüssel.
  * 
- * @param {string} key - the key is the name to save the payload in the backend
- * @param {Array, Object, string} value - the value is the payload
- * @returns - return executes the request and processes the response from the backend
+ * @param {string} key - Der Schlüssel, unter dem die Daten gespeichert werden.
+ * @param {Array|Object|string} value - Die zu speichernden Daten.
+ * @returns {Promise<void>} - Gibt ein Promise zurück, das nach erfolgreichem Speichern aufgelöst wird.
  */
 async function setItem(key, value) {
-    const payload = { key, value, token: STORAGE_TOKEN };
-    return fetch(STORAGE_URL, { method: 'POST', body: JSON.stringify(payload) })
-        .then(res => res.json());
+    try {
+        // Verweis auf das Dokument in der "storage" Collection
+        const docRef = window.doc(db, 'storage', key);
+
+        // Speichert die Daten im Dokument
+        await window.setDoc(docRef, { value });
+    } catch (error) {
+        console.error('Fehler beim Speichern der Daten: ', error);
+    }
 }
 
 
 /**
- * get the Datas from the backend
+ * Ruft Daten aus Firestore unter dem angegebenen Schlüssel ab.
  * 
- * @param {string} key - key under which the payload is stored
- * @returns - return executes the request and processes the response from the backend
+ * @param {string} key - Der Schlüssel, unter dem die Daten gespeichert sind.
+ * @returns {Promise<any>} - Gibt die abgerufenen Daten zurück.
+ * @throws {Error} - Wenn der Schlüssel nicht gefunden wurde oder ein anderer Fehler auftritt.
  */
 async function getItem(key) {
-    const url = `${STORAGE_URL}?key=${key}&token=${STORAGE_TOKEN}`;
-    return fetch(url).then(res => res.json()).then(res => {
-        if (res.data) { 
-            return res.data.value;
-        } throw `Could not find data with key "${key}".`;
-    });
+    try {
+        // Verweis auf das Dokument in der "storage" Collection
+        const docRef = window.doc(window.db, 'storage', key);
+
+        // Abrufen des Dokuments
+        const docSnap = await window.getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data().value;
+        } else {
+            throw `Keine Daten mit dem Schlüssel "${key}" gefunden.`;
+        }
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten: ', error);
+        throw error;
+    }
 }
 
 

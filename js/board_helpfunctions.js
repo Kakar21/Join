@@ -230,6 +230,5 @@ function sortAndFilterCards(inputId) {
  * Hides the "No Tasks Found"-Message
  */
 function RemoveNoTaksFound() {
-   console.log('test');
    document.getElementById('allertNoTasksFoundContainer').innerHTML = '';
 }

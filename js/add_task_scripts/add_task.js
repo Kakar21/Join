@@ -38,7 +38,6 @@ function loadFromAddTaskPage() {
 async function clearAllTasksInBackend() { //DO NOT DELETE THIS FUNCTION
   try {
     await setItem('tasks', []);
-    console.log('All tasks have been successfully cleared.');
   } catch (error) {
     console.error('Error while clearing tasks: ', error);
   }

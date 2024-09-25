@@ -81,12 +81,9 @@ async function loadCurrentUser() {
         let userData = await getItem("currentUser");
         if (userData && userData.length > 0) {
             currentUser = JSON.parse(userData);
-        } else {
-            console.log("CurrentUser is empty");
         }
     } catch (e) {
         console.error("Loading error:", e);
-        console.log("CurrentUserFail");
     }
 }
 
@@ -273,7 +270,6 @@ function stopPropagation(event) {
  */
 async function logOut() {
     currentUser = [];
-    console.log(currentUser);
     localStorage.removeItem("greetingAniPlayed");
     await setItem("currentUser", JSON.stringify(currentUser));
     localStorage.removeItem("joinInputs");
