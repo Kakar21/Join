@@ -34,14 +34,14 @@ function acceptAndSetEditOfTask(taskIndex, context) {
 function getValuesAfterEdit(taskId, context = "main") {
   return {
     "id": taskId,
-    "taskTitle": getTaskTitle(context),
+    "task_title": getTaskTitle(context),
     "description": getTaskDescription(context),
-    "assignedTo": getAssignedContacts(),
-    "dueDate": getDueDate(context),
+    "assigned_to": getAssignedContacts(),
+    "due_date": getDueDate(context),
     "priority": getPriority(),
     "category": getCategoryOfTask(taskId),
     "subtasks": getSubtask(),
-    "subtasksDone": getSubtasksDone(taskId),
+    "subtasks_done": getSubtasksDone(taskId),
     "state": getTaskState(taskId),
   };
 }
@@ -95,12 +95,12 @@ function getSubtasksDone(taskIndex) {
 function setValuesInEditCard(taskIndex, SubTasksDiv) {
   let openTask = tasks[taskIndex];
   let openTaskTitle = document.getElementById('task-title-input-popup');
-  openTaskTitle.value = openTask.taskTitle;
+  openTaskTitle.value = openTask.task_title;
   let openTaskDescription = document.getElementById("task-description-textarea-popup");
   openTaskDescription.value = openTask.description;
   let openTaskDate = document.getElementById("due-date-input-popup");
-  if (openTask.dueDate) {
-    let formattedDate = formatDateToInput(openTask.dueDate);
+  if (openTask.due_date) {
+    let formattedDate = formatDateToInput(openTask.due_date);
     openTaskDate.value = formattedDate;
   }
   createSubtaskList(taskIndex, SubTasksDiv);
@@ -196,7 +196,7 @@ function createSubtaskList(taskIndex, SubTasksDiv) {
  * @param {string} container - The ID of the HTML container where contact states will be updated.
  */
 function setClickedContacts(i, container) {
-  let assignedContacts = tasks[i].assignedTo;
+  let assignedContacts = tasks[i].assigned_to;
 
   clickedStates = Array(contacts.length).fill(false);
 

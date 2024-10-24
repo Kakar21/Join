@@ -17,16 +17,15 @@ async function renderContactList() {
 
     let letters = [];
 
-    for (let i = 0; i < contacts.length; i++) {
-        const element = contacts[i];
-        const firstLetter = element['name'].charAt(0);
+    contacts.forEach(contact => {
+        const firstLetter = contact['name'].charAt(0);
 
         if (letters.indexOf(firstLetter) == -1) {
             contactList.innerHTML += returnContactListHTML(0, firstLetter);
             letters.push(firstLetter);
         }
-        contactList.innerHTML += returnContactListHTML(1, 0, i, element['color'], getInitials(element['name']), element['name'], element['email']);
-    }
+        contactList.innerHTML += returnContactListHTML(1, 0, contact['id'], contact['color'], getInitials(contact['name']), contact['name'], contact['email']);
+    })
 }
 
 
@@ -60,7 +59,7 @@ function openEditContact(i) {
     renderPopUp('edit', i);
 
     document.getElementById('popUpVector').classList.add('vector-margin');
-    document.getElementById('popUpProfile').style.backgroundColor = contacts[i]['color'];
+    document.getElementById('popUpProfile').style.backgroundColor = getContactFromId(i)['color'];
     document.getElementById('popUpSubtitle').classList.add('d-none');
 
     popUpSubmit.parentNode.parentNode.onsubmit = function () { return editContact(i) };
@@ -113,7 +112,7 @@ function renderPopUp(variant, i) {
         popUpSubmit.previousElementSibling.innerHTML = /* html */ `Cancel<img src="./assets/img/Desktop/contacts/iconoir_cancel.svg" alt="Cancel">`
     } else if (variant == 'edit') {
         popUpTitle.innerHTML = 'Edit contact';
-        popUpProfile.innerHTML = getInitials(contacts[i]['name']);
+        popUpProfile.innerHTML = getInitials(getContactFromId(i)['name']);
         popUpSubmit.innerHTML = /* html */ `Save<img src="./assets/img/Desktop/contacts/check.svg"
         alt="Create Contact">`;
         popUpSubmit.previousElementSibling.innerHTML = 'Delete';
@@ -127,7 +126,7 @@ function renderPopUp(variant, i) {
  * @param {number} i - Index of the choosen contact
  */
 function setInput(i) {
-    const contact = contacts[i];
+    const contact = getContactFromId(i);
 
     document.getElementById('popUpName').value = contact['name'];
     document.getElementById('popUpEmail').value = contact['email'];
@@ -153,7 +152,7 @@ function resetInput() {
 async function openContact(i) {
     await renderContactList();
 
-    let contact = contacts[i];
+    let contact = getContactFromId(i);
     let contactsInfo = document.getElementById('contactsInfo');
     let contactElement = document.getElementById(`contact${i}`);
 
@@ -228,7 +227,8 @@ function closePopUp(submitted) {
 async function deleteContact(i) {
     deleteContactFromTasks(i);
     contacts.splice(i, 1);
-    await saveContacts();
+    contact = getContactFromId(i)
+    await saveContacts("DELETE", contact);
 
     renderContactList();
     document.getElementById('contactsInfo').innerHTML = '';
@@ -240,20 +240,25 @@ async function deleteContact(i) {
 }
 
 
+function getContactFromId(id) {
+    return contacts.find(contact => contact['id'] == id)
+}
+
+
 /**
  * Removes a contact from all tasks it's assigned to.
  * 
  * @param {number} i - The index of the contact to remove from tasks.
  */
 async function deleteContactFromTasks(i) {
-    let contactToDelete = contacts[i];
+    let contactToDelete = getContactFromId(i);
     for (let j = 0; j < tasks.length; j++) {
         const task = tasks[j];
-        for (let z = 0; z < task.assignedTo.length; z++) {
-            const contact = task.assignedTo[z].name;
+        for (let z = 0; z < task.assigned_to.length; z++) {
+            const contact = task.assigned_to[z].name;
 
             if (contact == contactToDelete.name) {
-                task.assignedTo.splice(z, 1);
+                task.assigned_to.splice(z, 1);
                 await setItem('tasks', tasks);
             }
         }
@@ -269,18 +274,20 @@ async function deleteContactFromTasks(i) {
 async function editContact(i) {
     event.preventDefault();
 
-    let lastId = contacts[i]['id'];
+    let lastId = getContactFromId(i)['id'];
 
-    contacts[i].name = document.getElementById('popUpName').value;
-    contacts[i].email = document.getElementById('popUpEmail').value;
-    contacts[i].phone = document.getElementById('popUpPhone').value;
+    getContactFromId(i).name = document.getElementById('popUpName').value;
+    getContactFromId(i).email = document.getElementById('popUpEmail').value;
+    getContactFromId(i).phone = document.getElementById('popUpPhone').value;
+
+    let editedContact = getContactFromId(lastId)
 
     contacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
     let index = contacts.findIndex(c => c.id == lastId);
-    await saveContacts()
+    await saveContacts("PUT", editedContact)
 
     closePopUp(true);
-    openContact(index);
+    openContact(lastId);
 }
 
 
@@ -302,7 +309,7 @@ async function addNewContact() {
     contacts.push(newContact);
     contacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
     let index = contacts.findIndex(c => c.id == lastId);
-    await saveContacts();
+    await saveContacts("POST", newContact);
 
     closePopUp(true);
     renderContactList();
@@ -316,7 +323,6 @@ async function addNewContact() {
  */
 async function addUserToContacts() {
     let newContact = {
-        "id": contacts.length,
         "color": randomColor(),
         "name": userName.value,
         "email": email.value,
@@ -325,7 +331,7 @@ async function addUserToContacts() {
 
     contacts.push(newContact);
     contacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
-    await saveContacts();
+    await saveContacts("POST", newContact);
 }
 
 
@@ -396,8 +402,13 @@ function doNotClose(event) {
 /**
  * Saves the contacts-array in the back end
  */
-async function saveContacts() {
-    await setItem('contacts', contacts);
+async function saveContacts(method, item) {
+    if (method == "POST") {
+        await postItem('contacts', item);
+    } else if (method == "PUT") {
+        await putItem('contacts', item);
+    } else if (method == "DELETE")
+        await deleteItem('contacts', item);
 }
 
 

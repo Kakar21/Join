@@ -261,10 +261,10 @@ function validateDropdown(inputId, warningId) {
 async function createTask(context) {
   let currentTasks = await getTasksArray();
   let newTask = await getValues(context); // Kontext an getValues übergeben
-
+  
   try {
     currentTasks.push(newTask);
-    await setItem('tasks', currentTasks);
+    await postItem('tasks', newTask);
   } catch (error) {
     console.error('Fehler beim Erstellen der Aufgabe: ', error);
   }

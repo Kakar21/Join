@@ -41,14 +41,14 @@ function addDescription(text, maxLength = 40) {
  * @param {number} i - The index of the task in the tasks array.
  */
 function addProgressBar(i) {
-   let task = tasks[i]['subtasks'].length + tasks[i]['subtasksDone'].length;
+   let task = getTaskFromId(i)['subtasks'].length + getTaskFromId(i)['subtasks_done'].length;
    if (task > 0) {
       let calculatetSubtask = 100 / task;
-      calculatetSubtask = calculatetSubtask * tasks[i]['subtasksDone'].length;
+      calculatetSubtask = calculatetSubtask * getTaskFromId(i)['subtasks_done'].length;
       content = document.getElementById(`progressbar${i}`);
       content.innerHTML = /*html*/ `
                 <progress max="100" value="${calculatetSubtask}"></progress>
-                <span>${tasks[i]['subtasksDone'].length}/${task} Subtasks</span>
+                <span>${getTaskFromId(i)['subtasks_done'].length}/${task} Subtasks</span>
                 `;
    } else {
       document.getElementById(`progressbar${i}`).remove();
@@ -62,7 +62,7 @@ function addProgressBar(i) {
  * @param {number} taskIndex - The index of the task in the tasks array.
  */
 function clickPriority(taskIndex) {
-   let setPriority = tasks[taskIndex].priority;
+   let setPriority = getTaskFromId(taskIndex).priority;
    setPrio(setPriority);
 }
 
@@ -75,7 +75,7 @@ function clickPriority(taskIndex) {
  */
 function addOpenTaskIcon(id, x) {
    let content = document.getElementById(id);
-   tasks[x]['assignedTo'].forEach((assignedContact) => {
+   getTaskFromId(x)['assigned_to'].forEach((assignedContact) => {
       let contact = contacts.find((c) => c.id === assignedContact.id);
       if (contact) {
          content.innerHTML += createContactIcon(contact);
@@ -93,10 +93,9 @@ function addOpenTaskIcon(id, x) {
 function addTaskIcon(id, x) {
    let content = document.getElementById(id);
    let contactsLeft;
-   const assignedContacts = tasks[x]['assignedTo'];
+   const assignedContacts = getTaskFromId(x)['assigned_to'];
 
    id = id.slice(-1);
-
    for (let i = 0; i < assignedContacts.length; i++) {
       let contact = contacts.find((c) => c.id === assignedContacts[i].id);
       contactsLeft = assignedContacts.length - i;
@@ -149,7 +148,7 @@ function allowDrop(ev) {
  * @param {number} id - The ID of the task to be moved.
  */
 async function moveTo(category) {
-   let task = tasks[currentDraggedElement];
+   let task = getTaskFromId(currentDragedElement);
 
    tasks.splice(currentDraggedElement, 1);
    tasks.push(task);

@@ -162,7 +162,7 @@ function toggleContact(index, container) {
   const contactDiv = document.getElementById(`contact${index}`);
   const checkboxImg = document.getElementById(`checkbox${index}`);
   const isClicked = getClickedState(index);
-  const contact = contacts[index];
+  const contact = getContactFromId(index);
   if (isClicked) {
     handleClickedState(contactDiv, checkboxImg, false, "./assets/img/Desktop/add-task/check_button.svg");
     removeAvatar(contact, container);
@@ -217,7 +217,7 @@ async function generateAssignContacts(dropdownId, container) {
 
   for (let i = 0; i < contacts.length; i++) {
     const selectableContact = contacts[i];
-    dropdowncontainer.innerHTML += generateAssignContactsHTML(selectableContact, i, container);
+    dropdowncontainer.innerHTML += generateAssignContactsHTML(selectableContact, selectableContact.id, container);
   }
 
   clickedStates = Array(contacts.length).fill(false);

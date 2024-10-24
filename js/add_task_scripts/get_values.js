@@ -14,14 +14,14 @@ async function getValues(context = "main") {
   let taskId = await createTaskId();
   return {
     "id": taskId,
-    "taskTitle": getTaskTitle(context),
+    "task_title": getTaskTitle(context),
     "description": getTaskDescription(context),
-    "assignedTo": getAssignedContacts(),
-    "dueDate": getDueDate(context),
+    "contact_ids": getAssignedContacts(),
+    "due_date": getDueDate(context),
     "priority": getPriority(),
     "category": getCategory(),
     "subtasks": getSubtask(),
-    "subtasksDone": [],
+    "subtasks_done": [],
     "state": currentTaskState,
   };
 }
@@ -86,12 +86,12 @@ function getTaskDescription(context) {
  * @returns {Array<Object>} An array of objects, each with the structure { id: number, name: string }.
  */
 function getAssignedContacts() {
-  let assignedContactDetails = [];
+  let assignedContactIds = [];
   for (let i = 0; i < assignedContacts.length; i++) {
     let contact = assignedContacts[i];
-    assignedContactDetails.push({ id: contact.id, name: contact.name });
+    assignedContactIds.push(contact.id);
   }
-  return assignedContactDetails;
+  return assignedContactIds;
 }
 
 

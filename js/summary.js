@@ -128,11 +128,11 @@ function renderDeadlineBox() {
     let deadlineDate = document.getElementById('deadlineDate');
 
     for (let i = 0; i < tasks.length; i++) {
-        let dateParts = tasks[i]['dueDate'].split('/');
+        let dateParts = tasks[i]['due_date'].split('/');
         let taskDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 
         if (taskDate > today) {
-            dates.push(tasks[i]['dueDate']);
+            dates.push(tasks[i]['due_date']);
         }
     };
 

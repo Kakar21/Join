@@ -56,15 +56,15 @@ function renderTasks() {
     "AwaitFeedbackContainer",
     "DoneContainer",
   ];
-
   containerIds.forEach((id) => (document.getElementById(id).innerHTML = ""));
-
   if (tasks.length > 0) {
-    tasks.forEach((task, i) => renderTaskCard(task.state, i));
+    tasks.forEach((task) => renderTaskCard(task.state, task.id));
+    
   } else {
     containerIds.forEach(addNoTaskHTML);
   }
 }
+
 
 
 /**
@@ -76,13 +76,19 @@ function renderTasks() {
 function renderTaskCard(taskStatus, taskIndex) {
   const containerId = `${taskStatus}Container`;
   const container = document.getElementById(containerId);
-  const task = tasks[taskIndex];
+  const task = getTaskFromId(taskIndex);
 
   container.innerHTML += generateTaskCardHTML(task, taskIndex);
 
   checkAndAddTasks(tasks);
   addTaskIcon(`cardIcon${taskIndex}`, taskIndex);
   addProgressBar(taskIndex);
+}
+
+
+
+function getTaskFromId(id) {
+  return tasks.find(task => task['id'] == id)
 }
 
 
@@ -96,7 +102,7 @@ function openCard(taskIndex) {
   content.innerHTML = "";
   const openCardContainer = document.getElementById("openCardContainer");
   openCardContainer.classList.remove("hidden");
-  let categoryName = tasks[taskIndex]["category"];
+  let categoryName = getTaskFromId(taskIndex)["category"];
 
   content.innerHTML = generateOpenCardHTML(taskIndex, categoryName);
   addOpenTaskIcon(`openCardIcon${taskIndex}`, taskIndex);
@@ -145,7 +151,7 @@ function addOpenCardSubtasks(taskIndex) {
     content.innerHTML += createIncompleteSubtaskHTML(subtask, i, taskIndex);
   });
 
-  tasks[taskIndex]["subtasksDone"].forEach((subtask, y) => {
+  tasks[taskIndex]["subtasks_done"].forEach((subtask, y) => {
     content.innerHTML += createCompleteSubtaskHTML(subtask, y, taskIndex);
   });
 
@@ -179,8 +185,8 @@ async function subtaskComplete(i, taskIndex) {
  * @param {number} taskIndex - Index of the task containing the subtasks.
  */
 async function subtaskUnComplete(i, taskIndex) {
-  let content = document.getElementById(`subtaskDone${i}`);
-  const subtask = tasks[taskIndex]["subtasksDone"][i];
+  let content = document.getElementById(`subtasks_done${i}`);
+  const subtask = tasks[taskIndex]["subtasks_done"][i];
   content.innerHTML = createIncompleteSubtaskHTML(subtask, i, taskIndex);
 
   moveSubtaskToNotDone(i, taskIndex);
@@ -198,7 +204,7 @@ async function subtaskUnComplete(i, taskIndex) {
 function moveSubtaskToDone(subTaskIndex, taskIndex) {
   let subTaskToRemove = tasks[taskIndex]["subtasks"][subTaskIndex];
   tasks[taskIndex]["subtasks"].splice(subTaskIndex, 1);
-  tasks[taskIndex]["subtasksDone"].push(subTaskToRemove);
+  tasks[taskIndex]["subtasks_done"].push(subTaskToRemove);
   addOpenCardSubtasks(taskIndex);
 }
 
@@ -210,8 +216,8 @@ function moveSubtaskToDone(subTaskIndex, taskIndex) {
  * @param {number} taskIndex - Index of the task containing the subtasks.
  */
 function moveSubtaskToNotDone(subTaskIndex, taskIndex) {
-  let subTaskToUndo = tasks[taskIndex]["subtasksDone"][subTaskIndex];
-  tasks[taskIndex]["subtasksDone"].splice(subTaskIndex, 1);
+  let subTaskToUndo = tasks[taskIndex]["subtasks_done"][subTaskIndex];
+  tasks[taskIndex]["subtasks_done"].splice(subTaskIndex, 1);
   tasks[taskIndex]["subtasks"].push(subTaskToUndo);
   addOpenCardSubtasks(taskIndex);
 }
@@ -394,5 +400,5 @@ async function deleteOpenCard(i) {
   tasks.splice(i, 1);
   renderTasks();
   closeCard(true);
-  await setItem("tasks", tasks);
+  await deleteItem("tasks", tasks);
 }

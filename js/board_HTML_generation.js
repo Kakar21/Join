@@ -173,17 +173,17 @@ function generateOpenCardHTML(taskIndex, categoryName) {
         </div>
         <div class="openCardOverflow">
             <div class="openCardContent">
-                <h3 id="openCardTitle${taskIndex}">${tasks[taskIndex][`taskTitle`]}</h3>
-                <h4 id="openCardDescription${taskIndex}">${tasks[taskIndex][`description`]}</h4>
+                <h3 id="openCardTitle${taskIndex}">${getTaskFromId(taskIndex)[`task_title`]}</h3>
+                <h4 id="openCardDescription${taskIndex}">${getTaskFromId(taskIndex)[`description`]}</h4>
                 <div class="openCardTable">
-                <p>Due date:</p><span id="openCardDate${taskIndex}">${tasks[taskIndex][`dueDate`]}<span>
+                <p>Due date:</p><span id="openCardDate${taskIndex}">${getTaskFromId(taskIndex)[`due_date`]}<span>
                 </div>
                 <div class="openCardTable priority">
                 <p>Priority:</p>
                     <div class="openCardPriority">
-                    <span id="openCardPriority${taskIndex}">${capFirstLetter(tasks[taskIndex][`priority`])}</span>
+                    <span id="openCardPriority${taskIndex}">${capFirstLetter(getTaskFromId(taskIndex)[`priority`])}</span>
                     <img class="noselect" src="./assets/img/Desktop/board/priority_symbols/${
-                    tasks[taskIndex][`priority`]
+                    getTaskFromId(taskIndex)[`priority`]
                     }.svg">
                     </div>
                 </div>
@@ -283,7 +283,7 @@ function createIncompleteSubtaskHTML(subtask, index, taskIndex) {
  */
 function createCompleteSubtaskHTML(subtask, index, taskIndex) {
    return /*html*/ `
-        <div class="openCardSubtasks" id="subtaskDone${index}" onclick="subtaskUnComplete(${index}, ${taskIndex})">
+        <div class="openCardSubtasks" id="subtasks_done${index}" onclick="subtaskUnComplete(${index}, ${taskIndex})">
         <img class="noselect" src="../assets/img/Desktop/add-task/subtasks_icons/checkbox_checked.svg">
           <p class="textCross">
             ${subtask}
@@ -306,7 +306,7 @@ function generateTaskCardHTML(task, taskIndex) {
             <div class="toDoCard">
                 <div class="${category(task.category)} headerUserStoryPopUp">${task.category}</div>
                 <div>
-                    <h3>${task.taskTitle}</h3>
+                    <h3>${task.task_title}</h3>
                     <p>${addDescription(task.description)}</p>
                 </div>
                 <div id="progressbar${taskIndex}" class="progressbar"></div>
