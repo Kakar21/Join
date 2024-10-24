@@ -63,11 +63,9 @@ function clearSubtask(SubTasksDiv) {
  */
 function clearAssignedContact(assignedContactsAvatarDiv) {
   assignedContacts = [];
-  for (let i = 0; i < clickedStates.length; i++) {
-    if (clickedStates[i]) {
-      toggleContact(i, assignedContactsAvatarDiv);
-    }
-  }
+  clickedStates.forEach(state => {
+    clearContact(Object.keys(state), assignedContactsAvatarDiv)
+  })
   updateAvatars(assignedContactsAvatarDiv);
 }
 

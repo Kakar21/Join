@@ -4,20 +4,9 @@
  * @param {number} index - Index of the contact.
  */
 function initializeClickedState(index) {
-  if (clickedStates[index] === undefined) {
-    clickedStates[index] = false;
+  if (getClickStateById(index) === undefined) {
+    setClickStateById(index, false)
   }
-}
-
-
-/**
- * Gets the selection state of a contact from the clickedStates array.
- *
- * @param {number} index - Index of the contact.
- * @returns {boolean} True if selected, false otherwise.
- */
-function getClickedState(index) {
-  return clickedStates[index];
 }
 
 
@@ -28,7 +17,22 @@ function getClickedState(index) {
  * @param {boolean} value - Selection state to set (true for selected, false for not selected).
  */
 function updateClickedState(index, value) {
-  clickedStates[index] = value;
+  setClickStateById(index, value)
+}
+
+
+function getClickStateById(id) {
+  const stateObject = clickedStates.find(state => state.hasOwnProperty(id));
+  return stateObject ? stateObject[id] : undefined;
+}
+
+function setClickStateById(id, value) {
+  clickedStates = clickedStates.map(state => {
+      if (state.hasOwnProperty(id)) {
+          return { [id]: value }; // Ändere den Wert für das spezifische id
+      }
+      return state; // Unveränderte Einträge zurückgeben
+  });
 }
 
 
@@ -117,10 +121,10 @@ function updateAvatars(container) {
   let avatarContainer = document.getElementById(container);
   avatarContainer.innerHTML = ""; 
 
-  for (let i = 0; i < assignedContacts.length; i++) {
-    let avatarHTML = generateAvatar(assignedContacts[i]);
+  assignedContacts.forEach(contact => {
+    let avatarHTML = generateAvatar(contact);
     avatarContainer.innerHTML += avatarHTML;
-  }
+  })
 }
 
 
@@ -261,7 +265,7 @@ function validateDropdown(inputId, warningId) {
 async function createTask(context) {
   let currentTasks = await getTasksArray();
   let newTask = await getValues(context); // Kontext an getValues übergeben
-  
+
   try {
     currentTasks.push(newTask);
     await postItem('tasks', newTask);

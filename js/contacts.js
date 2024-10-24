@@ -253,7 +253,7 @@ function getContactFromId(id) {
 async function deleteContactFromTasks(i) {
     let contactToDelete = getContactFromId(i);
     for (let j = 0; j < tasks.length; j++) {
-        const task = tasks[j];
+        const task = getTaskFromId(j);
         for (let z = 0; z < task.assigned_to.length; z++) {
             const contact = task.assigned_to[z].name;
 

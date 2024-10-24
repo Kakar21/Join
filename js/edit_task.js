@@ -12,9 +12,11 @@ function acceptAndSetEditOfTask(taskIndex, context) {
 
   if (isValidTitle && isValidDescription && isValidDueDate) {
     let updatedTask = getValuesAfterEdit(taskIndex, context);
-    tasks[taskIndex] = updatedTask;
+    updatedTaskIndex = tasks.indexOf(getTaskFromId(taskIndex))
+    tasks[updatedTaskIndex] = updatedTask;
+    tasks[updatedTaskIndex]['assigned_to'] = updatedTask['contact_ids']
 
-    setItem('tasks', tasks).then(() => {
+    putItem('tasks', updatedTask).then(() => {
       closeWindowAfterSavingEdit();
       loadBoard();
     });
@@ -36,7 +38,8 @@ function getValuesAfterEdit(taskId, context = "main") {
     "id": taskId,
     "task_title": getTaskTitle(context),
     "description": getTaskDescription(context),
-    "assigned_to": getAssignedContacts(),
+    "assigned_to": getAssignedContacts().forEach(id => getContactFromId(id)),
+    "contact_ids": getAssignedContacts(),
     "due_date": getDueDate(context),
     "priority": getPriority(),
     "category": getCategoryOfTask(taskId),
@@ -67,7 +70,7 @@ function closeWindowAfterSavingEdit() {
  * @returns {string} The state of the task (e.g., 'InProgress', 'Done', 'ToDo').
  */
 function getTaskState(taskIndex) {
-  let stateOfTask = tasks[taskIndex].state;
+  let stateOfTask = getTaskFromId(taskIndex).state;
   return stateOfTask;
 }
 
@@ -79,7 +82,7 @@ function getTaskState(taskIndex) {
  * @returns {Array} An array containing the completed subtasks of the specified task.
  */
 function getSubtasksDone(taskIndex) {
-  let subtasksDoneOfTask = tasks[taskIndex].subtasksDone;
+  let subtasksDoneOfTask = getTaskFromId(taskIndex).subtasks_done;
   return subtasksDoneOfTask;
 }
 
@@ -93,7 +96,7 @@ function getSubtasksDone(taskIndex) {
  * @param {string} SubTasksDiv - The ID of the HTML element where the subtasks will be displayed.
  */
 function setValuesInEditCard(taskIndex, SubTasksDiv) {
-  let openTask = tasks[taskIndex];
+  let openTask = getTaskFromId(taskIndex);
   let openTaskTitle = document.getElementById('task-title-input-popup');
   openTaskTitle.value = openTask.task_title;
   let openTaskDescription = document.getElementById("task-description-textarea-popup");
@@ -118,7 +121,7 @@ function setValuesInEditCard(taskIndex, SubTasksDiv) {
  */
 function setSubtasksOfTask(taskIndex) {
   subtasks = [];
-  let subTasksOfTask = tasks[taskIndex].subtasks;
+  let subTasksOfTask = getTaskFromId(taskIndex).subtasks;
   subtasks = subTasksOfTask;
 }
 
@@ -131,7 +134,7 @@ function setSubtasksOfTask(taskIndex) {
  * @returns {string} The category of the specified task.
  */
 function getCategoryOfTask(taskIndex) {
-  let categoryOfTaskToEdit = tasks[taskIndex].category;
+  let categoryOfTaskToEdit = getTaskFromId(taskIndex).category;
   return categoryOfTaskToEdit;
 }
 
@@ -178,8 +181,8 @@ function createSubtaskList(taskIndex, SubTasksDiv) {
   const subtaskContainer = document.getElementById(SubTasksDiv);
   subtaskContainer.innerHTML = "";
 
-  for (let j = 0; j < tasks[taskIndex].subtasks.length; j++) {
-    subtasks.push(tasks[taskIndex].subtasks[j]);
+  for (let j = 0; j < getTaskFromId(taskIndex).subtasks.length; j++) {
+    subtasks.push(getTaskFromId(taskIndex).subtasks[j]);
     const subtask = subtasks[j];
     subtaskContainer.innerHTML += generateSubtaskHTML(subtask, j, SubTasksDiv);
   }
@@ -196,14 +199,16 @@ function createSubtaskList(taskIndex, SubTasksDiv) {
  * @param {string} container - The ID of the HTML container where contact states will be updated.
  */
 function setClickedContacts(i, container) {
-  let assignedContacts = tasks[i].assigned_to;
+  let assignedContacts = getTaskFromId(i).assigned_to;
 
-  clickedStates = Array(contacts.length).fill(false);
+  clickedStates = contacts.map(contact => {
+    return { [contact.id]: false };
+  });
 
   assignedContacts.forEach(assignedContact => {
-    let contactIndex = contacts.findIndex(contact => contact.id === assignedContact.id);
-    if (contactIndex !== -1) {
-      handleClickOnAssignedContact(contactIndex, container);
+    let contact = contacts.find(contact => contact.id === assignedContact.id);
+    if (contact.id !== -1) {
+      handleClickOnAssignedContact(contact.id, container);
     }
   });
 }

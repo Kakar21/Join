@@ -91,7 +91,6 @@ function getTaskFromId(id) {
   return tasks.find(task => task['id'] == id)
 }
 
-
 /**
  * Opens and displays a detailed card for a task.
  *
@@ -147,11 +146,11 @@ function addOpenCardSubtasks(taskIndex) {
   let content = document.getElementById(`openCardSubtasks${taskIndex}`);
   content.innerHTML = "";
 
-  tasks[taskIndex]["subtasks"].forEach((subtask, i) => {
+  getTaskFromId(taskIndex)["subtasks"].forEach((subtask, i) => {
     content.innerHTML += createIncompleteSubtaskHTML(subtask, i, taskIndex);
   });
 
-  tasks[taskIndex]["subtasks_done"].forEach((subtask, y) => {
+  getTaskFromId(taskIndex)["subtasks_done"].forEach((subtask, y) => {
     content.innerHTML += createCompleteSubtaskHTML(subtask, y, taskIndex);
   });
 
@@ -169,7 +168,7 @@ function addOpenCardSubtasks(taskIndex) {
  */
 async function subtaskComplete(i, taskIndex) {
   let content = document.getElementById(`subtask${i}`);
-  const subtask = tasks[taskIndex]["subtasks"][i];
+  const subtask = getTaskFromId(taskIndex)["subtasks"][i];
   content.innerHTML = createCompleteSubtaskHTML(subtask, i, taskIndex);
 
   moveSubtaskToDone(i, taskIndex);
@@ -186,7 +185,7 @@ async function subtaskComplete(i, taskIndex) {
  */
 async function subtaskUnComplete(i, taskIndex) {
   let content = document.getElementById(`subtasks_done${i}`);
-  const subtask = tasks[taskIndex]["subtasks_done"][i];
+  const subtask = getTaskFromId(taskIndex)["subtasks_done"][i];
   content.innerHTML = createIncompleteSubtaskHTML(subtask, i, taskIndex);
 
   moveSubtaskToNotDone(i, taskIndex);
@@ -202,9 +201,9 @@ async function subtaskUnComplete(i, taskIndex) {
  * @param {number} taskIndex - Index of the task containing the subtasks.
  */
 function moveSubtaskToDone(subTaskIndex, taskIndex) {
-  let subTaskToRemove = tasks[taskIndex]["subtasks"][subTaskIndex];
-  tasks[taskIndex]["subtasks"].splice(subTaskIndex, 1);
-  tasks[taskIndex]["subtasks_done"].push(subTaskToRemove);
+  let subTaskToRemove = getTaskFromId(taskIndex)["subtasks"][subTaskIndex];
+  getTaskFromId(taskIndex)["subtasks"].splice(subTaskIndex, 1);
+  getTaskFromId(taskIndex)["subtasks_done"].push(subTaskToRemove);
   addOpenCardSubtasks(taskIndex);
 }
 
@@ -216,9 +215,9 @@ function moveSubtaskToDone(subTaskIndex, taskIndex) {
  * @param {number} taskIndex - Index of the task containing the subtasks.
  */
 function moveSubtaskToNotDone(subTaskIndex, taskIndex) {
-  let subTaskToUndo = tasks[taskIndex]["subtasks_done"][subTaskIndex];
-  tasks[taskIndex]["subtasks_done"].splice(subTaskIndex, 1);
-  tasks[taskIndex]["subtasks"].push(subTaskToUndo);
+  let subTaskToUndo = getTaskFromId(taskIndex)["subtasks_done"][subTaskIndex];
+  getTaskFromId(taskIndex)["subtasks_done"].splice(subTaskIndex, 1);
+  getTaskFromId(taskIndex)["subtasks"].push(subTaskToUndo);
   addOpenCardSubtasks(taskIndex);
 }
 
@@ -397,8 +396,9 @@ function hideAddTaskMenu(assignedContactsAvatarDivId) {
  * @param {number} i - The index of the task to delete.
  */
 async function deleteOpenCard(i) {
-  tasks.splice(i, 1);
+  task = getTaskFromId(i);
+  tasks.splice(tasks.indexOf(task), 1);
   renderTasks();
   closeCard(true);
-  await deleteItem("tasks", tasks);
+  await deleteItem("tasks", task);
 }

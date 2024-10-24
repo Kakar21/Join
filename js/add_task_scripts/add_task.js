@@ -161,7 +161,7 @@ function toggleContact(index, container) {
   initializeClickedState(index);
   const contactDiv = document.getElementById(`contact${index}`);
   const checkboxImg = document.getElementById(`checkbox${index}`);
-  const isClicked = getClickedState(index);
+  const isClicked = getClickStateById(index);
   const contact = getContactFromId(index);
   if (isClicked) {
     handleClickedState(contactDiv, checkboxImg, false, "./assets/img/Desktop/add-task/check_button.svg");
@@ -171,6 +171,18 @@ function toggleContact(index, container) {
     addAvatar(contact, container);
   }
   updateClickedState(index, !isClicked);
+}
+
+
+
+function clearContact(index, container) {
+  initializeClickedState(index);
+  const contactDiv = document.getElementById(`contact${index}`);
+  const checkboxImg = document.getElementById(`checkbox${index}`);
+  const contact = getContactFromId(index);
+  handleClickedState(contactDiv, checkboxImg, false, "./assets/img/Desktop/add-task/check_button.svg");
+  removeAvatar(contact, container);
+  updateClickedState(index, false);
 }
 
 
@@ -214,13 +226,15 @@ function closeDropdown(dropdown, arrowImage) {
 async function generateAssignContacts(dropdownId, container) {
   let dropdowncontainer = document.getElementById(`${dropdownId}`);
   dropdowncontainer.innerHTML = "";
-
+  
   for (let i = 0; i < contacts.length; i++) {
     const selectableContact = contacts[i];
     dropdowncontainer.innerHTML += generateAssignContactsHTML(selectableContact, selectableContact.id, container);
   }
 
-  clickedStates = Array(contacts.length).fill(false);
+  clickedStates = contacts.map(contact => {
+    return { [contact.id]: false };
+  });
 }
 
 

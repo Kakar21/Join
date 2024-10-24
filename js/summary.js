@@ -109,7 +109,7 @@ async function playGreetingAni() {
 function findTaskQuantitys(subcategory, match) {
     let count = 0;
     for (let i = 0; i < tasks.length; i++) {
-        const element = tasks[i];
+        const element = getTaskFromId(i);
 
         if (element[subcategory] == match) {
             count++;
@@ -128,11 +128,11 @@ function renderDeadlineBox() {
     let deadlineDate = document.getElementById('deadlineDate');
 
     for (let i = 0; i < tasks.length; i++) {
-        let dateParts = tasks[i]['due_date'].split('/');
+        let dateParts = getTaskFromId(i)['due_date'].split('/');
         let taskDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 
         if (taskDate > today) {
-            dates.push(tasks[i]['due_date']);
+            dates.push(getTaskFromId(i)['due_date']);
         }
     };
 

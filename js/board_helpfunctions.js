@@ -41,7 +41,8 @@ function addDescription(text, maxLength = 40) {
  * @param {number} i - The index of the task in the tasks array.
  */
 function addProgressBar(i) {
-   let task = getTaskFromId(i)['subtasks'].length + getTaskFromId(i)['subtasks_done'].length;
+   console.log(getTaskFromId(i))
+   let task = (getTaskFromId(i)['subtasks'].length) + (getTaskFromId(i)['subtasks_done'].length);
    if (task > 0) {
       let calculatetSubtask = 100 / task;
       calculatetSubtask = calculatetSubtask * getTaskFromId(i)['subtasks_done'].length;
@@ -94,18 +95,28 @@ function addTaskIcon(id, x) {
    let content = document.getElementById(id);
    let contactsLeft;
    const assignedContacts = getTaskFromId(x)['assigned_to'];
-
    id = id.slice(-1);
-   for (let i = 0; i < assignedContacts.length; i++) {
-      let contact = contacts.find((c) => c.id === assignedContacts[i].id);
+   let i = 0
+   assignedContacts.forEach(assignedContact => {
+      let contact;
+      if (typeof assignedContact === 'number') {
+         contact = getContactFromId(assignedContact)
+      } else {
+         contact = getContactFromId(assignedContact.id)
+      }
       contactsLeft = assignedContacts.length - i;
       content.innerHTML += createContactIconHTML(contact, i, contactsLeft);
-
       if (i == 3) {
          return;
+      } else {
+         i++
       }
-   }
+   })
 }
+
+function getAssignedContactsFromId(taskId, contactId) {
+   return getTaskFromId(taskId).assigned_to.find(contact => contact['id'] == contactId)
+ }
 
 
 /**
@@ -153,7 +164,7 @@ async function moveTo(category) {
    tasks.splice(currentDraggedElement, 1);
    tasks.push(task);
 
-   tasks[tasks.length - 1][`state`] = category;
+   getTaskFromId(tasks.length - 1)[`state`] = category;
    await saveStateChangeAfterDroppingTask();
    renderTasks();
    hideAllHoverContainers();
