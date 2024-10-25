@@ -12,7 +12,6 @@ let currentTaskState = "ToDo";
  */
 async function getValues(context = "main") {
   let taskId = await createTaskId();
-  debugger
   return {
     "id": taskId,
     "task_title": getTaskTitle(context),

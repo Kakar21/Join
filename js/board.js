@@ -3,7 +3,7 @@
  * 
  * @type {Element}
  */
-let currentDragedElement;
+let currentDraggedElement;
 
 
 /**
@@ -172,7 +172,7 @@ async function subtaskComplete(i, taskIndex) {
   content.innerHTML = createCompleteSubtaskHTML(subtask, i, taskIndex);
 
   moveSubtaskToDone(i, taskIndex);
-  await setItem("tasks", tasks);
+  await putItem("tasks", getTaskFromId(taskIndex));
   addOpenCardSubtasks(taskIndex);
 }
 
@@ -189,7 +189,7 @@ async function subtaskUnComplete(i, taskIndex) {
   content.innerHTML = createIncompleteSubtaskHTML(subtask, i, taskIndex);
 
   moveSubtaskToNotDone(i, taskIndex);
-  await setItem("tasks", tasks);
+  await putItem("tasks", getTaskFromId(taskIndex));
   addOpenCardSubtasks(taskIndex);
 }
 

@@ -1,3 +1,5 @@
+let summaryData = {}
+
 /**
  * Initializes the summary.html
  */
@@ -5,7 +7,8 @@ async function initSummary() {
     if (window.matchMedia("(max-width: 1000px)").matches) {
         await playGreetingAni();
     }
-    await setTasks();
+    await getSummaryData();
+    // await setTasks();
     renderSummaryBoard();
     renderSummaryGreeting();
 }
@@ -28,13 +31,13 @@ async function setTasks() {
  * Replaces the numbers and "urgent"/deadline box
  */
 function renderSummaryBoard() {
-    document.getElementById('toDoNum').innerHTML = findTaskQuantitys('state', 'ToDo');
-    document.getElementById('doneNum').innerHTML = findTaskQuantitys('state', 'Done');
-    document.getElementById('urgentNum').innerHTML = findTaskQuantitys('priority', 'urgent');
-    renderDeadlineBox();
-    document.getElementById('tasksNum').innerHTML = tasks.length;
-    document.getElementById('inProgressNum').innerHTML = findTaskQuantitys('state', 'InProgress');
-    document.getElementById('awaitFeedbackNum').innerHTML = findTaskQuantitys('state', 'AwaitFeedback');
+    document.getElementById('toDoNum').innerHTML = summaryData['todo_count'];
+    document.getElementById('doneNum').innerHTML = summaryData['done_count'];
+    document.getElementById('urgentNum').innerHTML = summaryData['urgent_count'];
+    document.getElementById('deadlineDate').innerHTML = summaryData['next_deadline'] || 'No upcoming deadlines'
+    document.getElementById('tasksNum').innerHTML = summaryData['tasks_count'];
+    document.getElementById('inProgressNum').innerHTML = summaryData['in_progress_count'];
+    document.getElementById('awaitFeedbackNum').innerHTML = summaryData['awaiting_feedback_count'];
 }
 
 
@@ -99,24 +102,24 @@ async function playGreetingAni() {
 }
 
 
-/**
- *  Searches in the tasks-array for matches in the subcategory
- * 
- * @param {string} subcategory - JSON Key in tasks-array 
- * @param {string} match - JSON Value in tasks-array
- * @returns - count of matches
- */
-function findTaskQuantitys(subcategory, match) {
-    let count = 0;
-    for (let i = 0; i < tasks.length; i++) {
-        const element = getTaskFromId(i);
+// /**
+//  *  Searches in the tasks-array for matches in the subcategory
+//  * 
+//  * @param {string} subcategory - JSON Key in tasks-array 
+//  * @param {string} match - JSON Value in tasks-array
+//  * @returns - count of matches
+//  */
+// function findTaskQuantitys(subcategory, match) {
+//     let count = 0;
+//     for (let i = 0; i < tasks.length; i++) {
+//         const element = getTaskFromId(i);
 
-        if (element[subcategory] == match) {
-            count++;
-        }
-    };
-    return count;
-}
+//         if (element[subcategory] == match) {
+//             count++;
+//         }
+//     };
+//     return count;
+// }
 
 
 /**

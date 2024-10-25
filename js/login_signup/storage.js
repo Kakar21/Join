@@ -1,7 +1,7 @@
 
 const STORAGE_TOKEN = '8P6ZMZZXOD1PUSKXJNGCX6Y5OU550K3CS45YN7FK';
 const STORAGE_URL = 'https://remote-storage.developerakademie.org/item';
-const NEW_STORAGE_URL = 'http://127.0.0.1:8000/api'
+const NEW_STORAGE_URL = 'http://127.0.0.1:8000/api';
 
 
 /**
@@ -27,7 +27,7 @@ async function setItem(key, value) {
 async function getItem(key) {
     const url = `${STORAGE_URL}?key=${key}&token=${STORAGE_TOKEN}`;
     return fetch(url).then(res => res.json()).then(res => {
-        if (res.data) { 
+        if (res.data) {
             return res.data.value;
         } throw `Could not find data with key "${key}".`;
     });
@@ -43,13 +43,13 @@ async function getItem(key) {
  */
 async function postItem(key, value) {
     const url = `${NEW_STORAGE_URL}/${key}/`;
-    return fetch(url, { 
+    return fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(value)
-    })
+    });
 }
 
 
@@ -61,11 +61,11 @@ async function postItem(key, value) {
  * @returns - return the status of the request
  */
 async function deleteItem(key, value) {
-    id = value.id
+    id = value.id;
     const url = `${NEW_STORAGE_URL}/${key}/${id}/`;
     return fetch(url, {
         method: 'DELETE'
-    })
+    });
 }
 
 
@@ -77,7 +77,7 @@ async function deleteItem(key, value) {
  * @returns - return the status of the request
  */
 async function putItem(key, value) {
-    id = value.id
+    id = value.id;
     const url = `${NEW_STORAGE_URL}/${key}/${id}/`;
     const res = await fetch(url, {
         method: 'PUT',
@@ -85,7 +85,7 @@ async function putItem(key, value) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(value)
-    })
+    });
 }
 
 
@@ -98,7 +98,7 @@ async function putItem(key, value) {
 async function newGetItem(key) {
     const url = `${NEW_STORAGE_URL}/${key}/`;
     return fetch(url).then(res => res.json()).then(res => {
-        if (res) { 
+        if (res) {
             return res;
         } throw `Could not find data with key "${key}".`;
     });
@@ -156,4 +156,20 @@ async function getContactsArray() {
     }
 }
 
-// TODO: getItem und Contacts eingebungen jetzt setItem und für Contacts und dann beides für alle anderen
+
+
+async function getSummaryData() {
+    try {
+        summaryData = await newGetItem("summary");
+        if (Array.isArray(summaryData)) {
+            return summaryData;
+        } else if (typeof summaryData === 'string') {
+            return JSON.parse(summaryData);
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error('Error while loading summary: ', error);
+        return [];
+    }
+}

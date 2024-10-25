@@ -41,7 +41,6 @@ function addDescription(text, maxLength = 40) {
  * @param {number} i - The index of the task in the tasks array.
  */
 function addProgressBar(i) {
-   console.log(getTaskFromId(i))
    let task = (getTaskFromId(i)['subtasks'].length) + (getTaskFromId(i)['subtasks_done'].length);
    if (task > 0) {
       let calculatetSubtask = 100 / task;
@@ -96,22 +95,24 @@ function addTaskIcon(id, x) {
    let contactsLeft;
    const assignedContacts = getTaskFromId(x)['assigned_to'];
    id = id.slice(-1);
-   let i = 0
-   assignedContacts.forEach(assignedContact => {
+   
+   for (let i = 0; i < assignedContacts.length; i++) {
       let contact;
+      const assignedContact = assignedContacts[i];
+      
       if (typeof assignedContact === 'number') {
-         contact = getContactFromId(assignedContact)
+         contact = getContactFromId(assignedContact);
       } else {
-         contact = getContactFromId(assignedContact.id)
+         contact = getContactFromId(assignedContact.id);
       }
+      
       contactsLeft = assignedContacts.length - i;
       content.innerHTML += createContactIconHTML(contact, i, contactsLeft);
-      if (i == 3) {
-         return;
-      } else {
-         i++
+      
+      if (i === 3) {
+         break;
       }
-   })
+   }
 }
 
 function getAssignedContactsFromId(taskId, contactId) {
@@ -159,12 +160,13 @@ function allowDrop(ev) {
  * @param {number} id - The ID of the task to be moved.
  */
 async function moveTo(category) {
-   let task = getTaskFromId(currentDragedElement);
-
-   tasks.splice(currentDraggedElement, 1);
+   let task = getTaskFromId(currentDraggedElement);
+   let index = tasks.indexOf(task)
+   
+   tasks.splice(index, 1);
    tasks.push(task);
 
-   getTaskFromId(tasks.length - 1)[`state`] = category;
+   tasks[tasks.length - 1][`state`] = category;
    await saveStateChangeAfterDroppingTask();
    renderTasks();
    hideAllHoverContainers();
@@ -175,8 +177,8 @@ async function moveTo(category) {
  * Saves Tasks into Backend
  */
 async function saveStateChangeAfterDroppingTask() {
-   let tasksToPush = tasks;
-   await setItem('tasks', tasksToPush);
+   let taskToPush = tasks[tasks.length - 1];
+   await putItem('tasks', taskToPush);
 }
 
 
