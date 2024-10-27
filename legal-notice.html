@@ -9,30 +9,37 @@
   <link rel="stylesheet" href="./style/fonts.css" />
   <!-- <link rel="stylesheet" href="./style/legal-notice.css" /> -->
 
-  <link rel="stylesheet" href="./assets/templates/header_sidebar.css" />
+  <link rel="stylesheet" href="./assets/header-sidebar/header_sidebar.css" />
   <script src="./js/login_signup/storage.js"></script>
-  <script src="./assets/templates/header_sidebar.js"></script>
+  <script src="./assets/header-sidebar/header_sidebar.js"></script>
 
   <link rel="stylesheet" href="./style/legal-notice.css" />
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 </head>
 
 <body onload="init()">
   <!-- Header template -->
-  <div w3-include-html="./assets/templates/header_sidebar.html"></div>
+  <div w3-include-html="./assets/header-sidebar/header_sidebar.html"></div>
 
   <!-- Content -->
   <div class="content" id="content">
     <section class="legal-notice">
       <div class="content-title-div">
         <h1 class="content-title">Legal Notice</h1>
-        <a id="back-button" class="noselect" href="javascript:history.back()"> <img src="./assets/img/Desktop/general_elements/arrow_left/default.svg"
-            alt="Go Back"></a>
+        <a id="back-button" class="noselect" href="javascript:history.back()"> <img
+            src="./assets/img/Desktop/general_elements/arrow_left/default.svg" alt="Go Back"></a>
       </div>
 
       <div class="legal-notice-content">
@@ -43,11 +50,11 @@
           <li>Joost Heidrich</li>
           <li>Ghulammustafa Kakar</li>
           <br>
-          <li>Mustermann Straße 8</li>
-          <li>98765 Maxhausen</li>
+          <li>Karlstraße 6A</li>
+          <li>38300 Wolfenbüttel</li>
           <br />
           <h3>Exploring the Board</h3>
-          <p>Email: <a href="mailto:sebtrei1234@gmail.com"><span>sebtrei1234@gmail.com</span></a></p>
+          <p>Email: <a href="mailto:ghulammustafa@kakar.dev"><span>ghulammustafa@kakar.dev</span></a></p>
         </div>
 
         <div>
@@ -138,7 +145,7 @@
             relating to your use of
             <span>Join</span> and/or your breach
             of this Legal Notice. For any questions or notices, please contact
-            us at <a href="mailto:sebtrei1234@gmail.com"><span>Contact</span></a>. Date: July 26, 2023
+            us at <a href="mailto:ghulammustafa@kakar.dev"><span>Contact</span></a>. Date: July 26, 2023
           </p>
         </div>
       </div>

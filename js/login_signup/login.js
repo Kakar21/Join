@@ -54,35 +54,76 @@ function visibilityOnOffImage() {
 
 
 /**
- * Load Users from Backend
- *
+ * Handles user login, validates input, and manages login flow.
+ * Checks if input fields are filled, attempts login, and saves user data
+ * if "Remember Me" is selected.
+ * @returns {Promise<void>} - Executes login flow or shows error message on failure.
  */
-async function loadUsers() {
-    try {
-        registerUsers = JSON.parse(await getItem("users"));
-    } catch (e) {
-        console.error("Loading error:", e);
+async function login() {
+    if (loginEmail.value === "" || passwordLogin.value === "") {
+        showTextFailLogin();
+    } else {
+        try {
+            await loginUser();
+            if (saveRememberMe === "true") {
+                RememberMeSaveToLocalStorage();
+            }
+            
+            emailAndPasswordIsValid();
+            abledDisabledBtn(true);    
+            registerUser = false;
+        } catch (error) {
+            showTextFailLogin();
+        }
     }
 }
 
 
 /**
- * Checked Password and Useremail
- *
+ * Logs in a user by sending credentials to the backend.
+ * @returns {Promise<void>} - Saves user data on success or throws an error on failure.
  */
-function loginCheckEmailAndPassword() {
-    let email = loginEmail.value.trim();
-    let password = passwordLogin.value.trim();
-    if (email === "" || password === "") {
-        showTextFailLogin();
-    } else {
-        isUserOfRegisertUser(email, password);
-        if (!registerUser) {
-            showTextFailLogin();
+async function loginUser() {
+    const url = 'http://127.0.0.1:8000/auth/login/';
+
+    const userData = {
+        email: loginEmail.value,
+        password: passwordLogin.value
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData
         }
-        registerUser = false;
-        abledDisabledBtn(false);
+
+        const data = await response.json()
+        saveUser(data)
+
+    } catch (error) {
+        console.error('Error during login:', error);
+        throw error;
     }
+}
+
+
+/**
+ * Saves the user auth object in the local storage
+ * @param {Object} data 
+ */
+function saveUser(data) {
+    localStorage.setItem('id', data.id);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    localStorage.setItem('email', data.email);
 }
 
 
@@ -124,12 +165,22 @@ async function isUserOfRegisertUser(email, password) {
  * Forward to the next Page, if the email and password are valid
  *
  */
-function emailAndPasswordIsValid() {
+async function emailAndPasswordIsValid() {
     loginEmail.value = "";
-    document.getElementById(`loginPassword`).value = "";
+    passwordLogin.value = "";
+    localStorage.setItem('anonymous', false);
+    await loadAnonymous();
     document.getElementById("rememberMeEmptyImageBox").src =
         "assets/img/Desktop/login_signup/checkbox/empty.svg";
     window.location.href = "summary.html";
+}
+
+
+/**
+ * Gets the anonymous value from local storage
+ */
+function loadAnonymous() {
+    anonymous = localStorage.getItem('anonymous');
 }
 
 
@@ -193,10 +244,9 @@ function RememberMeSaveToLocalStorage() {
 function loadStorage() {
     let ArrayAsText = localStorage.getItem("joinInputs");
     if (ArrayAsText === null) {
-        loadUsers();
+        return
     } else {
         ArrayToSave = JSON.parse(ArrayAsText);
-        loadUsers();
         loadFillInput();
     }
 }
@@ -231,7 +281,7 @@ async function guestAccount() {
     loginEmail.value = guest["email"];
     passwordLogin.value = guest["password"];
     currentUser = guest;
-    await setItem("currentUser", JSON.stringify(currentUser));
+    await login();
 
     setTimeout(function () {
         loginEmail.value = "";
@@ -246,6 +296,5 @@ async function guestAccount() {
  * 
  */
 async function withoutSidebarLinks(){
-    currentUser = ['#everyone'];
-    await setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem('anonymous', true);
 }

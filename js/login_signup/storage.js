@@ -1,37 +1,4 @@
-
-const STORAGE_TOKEN = '8P6ZMZZXOD1PUSKXJNGCX6Y5OU550K3CS45YN7FK';
-const STORAGE_URL = 'https://remote-storage.developerakademie.org/item';
-const NEW_STORAGE_URL = 'http://127.0.0.1:8000/api';
-
-
-/**
- * Set Datas in the backend
- * 
- * @param {string} key - the key is the name to save the payload in the backend
- * @param {Array, Object, string} value - the value is the payload
- * @returns - return executes the request and processes the response from the backend
- */
-async function setItem(key, value) {
-    const payload = { key, value, token: STORAGE_TOKEN };
-    return fetch(STORAGE_URL, { method: 'POST', body: JSON.stringify(payload) })
-        .then(res => res.json());
-}
-
-
-/**
- * get the Datas from the backend
- * 
- * @param {string} key - key under which the payload is stored
- * @returns - return executes the request and processes the response from the backend
- */
-async function getItem(key) {
-    const url = `${STORAGE_URL}?key=${key}&token=${STORAGE_TOKEN}`;
-    return fetch(url).then(res => res.json()).then(res => {
-        if (res.data) {
-            return res.data.value;
-        } throw `Could not find data with key "${key}".`;
-    });
-}
+const STORAGE_URL = 'http://127.0.0.1:8000/api';
 
 
 /**
@@ -42,14 +9,16 @@ async function getItem(key) {
  * @returns - return executes the request and processes the response from the backend
  */
 async function postItem(key, value) {
-    const url = `${NEW_STORAGE_URL}/${key}/`;
+    const url = `${STORAGE_URL}/${key}/`;
+    const authToken = localStorage.getItem('token') || token;
     return fetch(url, {
         method: 'POST',
         headers: {
+            'Authorization': `Token ${authToken}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(value)
-    });
+    }).then(response => response.json());
 }
 
 
@@ -62,9 +31,14 @@ async function postItem(key, value) {
  */
 async function deleteItem(key, value) {
     id = value.id;
-    const url = `${NEW_STORAGE_URL}/${key}/${id}/`;
+    const url = `${STORAGE_URL}/${key}/${id}/`;
+    const authToken = localStorage.getItem('token');
     return fetch(url, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Token ${authToken}`,
+            'Content-Type': 'application/json'
+        },
     });
 }
 
@@ -78,10 +52,12 @@ async function deleteItem(key, value) {
  */
 async function putItem(key, value) {
     id = value.id;
-    const url = `${NEW_STORAGE_URL}/${key}/${id}/`;
+    const url = `${STORAGE_URL}/${key}/${id}/`;
+    const authToken = localStorage.getItem('token');
     const res = await fetch(url, {
         method: 'PUT',
         headers: {
+            'Authorization': `Token ${authToken}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(value)
@@ -95,9 +71,16 @@ async function putItem(key, value) {
  * @param {string} key - key under which the payload is stored
  * @returns - return executes the request and processes the response from the backend
  */
-async function newGetItem(key) {
-    const url = `${NEW_STORAGE_URL}/${key}/`;
-    return fetch(url).then(res => res.json()).then(res => {
+async function getItem(key) {
+    const url = `${STORAGE_URL}/${key}/`;
+    const authToken = localStorage.getItem('token') || token;
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json()).then(res => {
         if (res) {
             return res;
         } throw `Could not find data with key "${key}".`;
@@ -116,7 +99,7 @@ async function newGetItem(key) {
  */
 async function getTasksArray() {
     try {
-        const tasksData = await newGetItem('tasks');
+        const tasksData = await getItem('tasks');
         if (Array.isArray(tasksData)) {
             return tasksData;
         } else if (typeof tasksData === 'string') {
@@ -142,7 +125,7 @@ async function getTasksArray() {
  */
 async function getContactsArray() {
     try {
-        const contactsData = await newGetItem('contacts');
+        const contactsData = await getItem('contacts');
         if (Array.isArray(contactsData)) {
             return contactsData;
         } else if (typeof contactsData === 'string') {
@@ -157,10 +140,13 @@ async function getContactsArray() {
 }
 
 
-
+/**
+ * Fetches summary data from the backend and returns it as an array.
+ * @returns {Promise<Array>} - Summary data array or empty array on error.
+ */
 async function getSummaryData() {
     try {
-        summaryData = await newGetItem("summary");
+        summaryData = await getItem("summary");
         if (Array.isArray(summaryData)) {
             return summaryData;
         } else if (typeof summaryData === 'string') {

@@ -11,11 +11,18 @@
     <link rel="stylesheet" href="./style/login_signup.css">
     <link rel="stylesheet" href="./style/fonts.css">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 
 
 </head>
@@ -53,7 +60,7 @@
                         <img src="./assets/img/Desktop/login_signup/lock.svg" id="passwordImage"
                             onclick="visibilityOnOffImage()" alt="Schloss Icon">
                     </div>
-                    <span id="fail-login" class="fail-login">Wrong email or password Ups! Try again.</span>
+                    <span id="fail-login" class="fail-login">Ups! Wrong email or password. Try again.</span>
                 </form>
 
                 <div class="login-content-checkbox">
@@ -63,7 +70,7 @@
                 </div>
 
                 <div class="login-content-btn noselect">
-                    <button class="btn-login" id="btn-login" onclick="loginCheckEmailAndPassword()" disabled>Log in</button>
+                    <button class="btn-login" id="btn-login" onclick="login()" disabled>Log in</button>
                     <button class="btn-guest" id="btn-guest" onclick="guestAccount()" disabled>Guest Log in</button>
                 </div>
 

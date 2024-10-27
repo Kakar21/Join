@@ -8,7 +8,8 @@ let nameOfPage = [
     "legal-notice",
 ];
 let filterExcludePages = ["help", "privacy-policy", "legal-notice"];
-let currentUser = [];
+let currentUser = {};
+let anonymous = "false";
 let dropDownIsOpen = false;
 
 
@@ -18,6 +19,7 @@ let dropDownIsOpen = false;
  */
 async function init() {
     await loadCurrentUser();
+    await loadAnonymous();
     await includeHTML();
     await getInitialsCurrentUser();
     await whichPageIsCurrent();
@@ -50,11 +52,12 @@ async function loadTemplateAndExecuteFunctions(file, element) {
     if (resp.ok) {
         let templateHTML = await resp.text();
         element.innerHTML = templateHTML;
-        if (currentUser.length === 0) {
+
+        if (!currentUser["token"] && (anonymous == "false")) {
             element.style = 'display:none';
             location.href = "index.html";
         }
-        if (currentUser == "#everyone") {
+        if (anonymous == "true") {
             partDisplayNone("sidebarMainButtons");
             backButtonClose();
         }
@@ -78,16 +81,23 @@ function backButtonClose() {
  */
 async function loadCurrentUser() {
     try {
-        let userData = await getItem("currentUser");
-        if (userData && userData.length > 0) {
-            currentUser = JSON.parse(userData);
-        } else {
-            console.log("CurrentUser is empty");
+        currentUser = {
+            "id": localStorage.getItem('id'),
+            "token": localStorage.getItem('token'),
+            "username": localStorage.getItem('username'),
+            "email": localStorage.getItem('email'),
         }
     } catch (e) {
-        console.error("Loading error:", e);
-        console.log("CurrentUserFail");
+        return
     }
+}
+
+
+/**
+ * Load the anonymous value from local storage
+ */
+function loadAnonymous() {
+    anonymous = localStorage.getItem('anonymous');
 }
 
 
@@ -175,8 +185,8 @@ function markEffects(x) {
  */
 async function getInitialsCurrentUser() {
     let textArea = document.getElementById("headerIconText");
-    let userName = currentUser["name"];
-    if (!(currentUser == "#everyone") && !(currentUser.length === 0)) {
+    let userName = currentUser["username"];
+    if ((anonymous == "false") && !(currentUser.length === 0)) {
         let firstLastName = userName.split(" ");
         let firstLetter = firstLastName[0].charAt(0).toLocaleUpperCase();
         if (firstLastName[1]) {
@@ -273,10 +283,20 @@ function stopPropagation(event) {
  */
 async function logOut() {
     currentUser = [];
-    console.log(currentUser);
     localStorage.removeItem("greetingAniPlayed");
-    await setItem("currentUser", JSON.stringify(currentUser));
+    removeCurrentUser()
     localStorage.removeItem("joinInputs");
+}
+
+
+/**
+ * Deletes the user authentication from the local storage
+ */
+function removeCurrentUser() {
+    localStorage.removeItem('id');
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
 }
 
 
@@ -308,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
  * @param {HTMLElement} logo 
  */
 function handleLogoState(logo) {
-    if (!(currentUser == "#everyone")) {
+    if (anonymous == "false") {
         logo.style.cursor = "pointer";
         logo.addEventListener("click", handleLogoClick);
     } else {

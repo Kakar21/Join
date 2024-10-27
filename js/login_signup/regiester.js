@@ -1,37 +1,12 @@
 let users = [];
 let userEmailNotfound = true;
-
 let userName = document.getElementById("userName");
 let email = document.getElementById("email");
 let password = document.getElementById("firstPassword");
 let confirmPassword = document.getElementById("confirmPassword");
 let registerBtn = document.getElementById("registerBtn");
 let policyImage = document.getElementById("privacyPolicyImage");
-
-
-/**
- * Initializes the register
- */
-async function registerInit() {
-    loadUsers();
-}
-
-
-/**
-//  * Control the register and load User
-//  *
-//  * @param {string} ok - string from the function in the registry
-//  */
-// async function loadUsers(ok) {
-//     try {
-//         users = JSON.parse(await getItem("users"));
-//         if (ok === "successfully") {
-//             openRegistrationModal();
-//         }
-//     } catch (e) {
-//         console.error("Loading error:", e);
-//     }
-// }
+let token = ''
 
 
 /**
@@ -42,11 +17,6 @@ async function register() {
     let failConfirmPassword = document.getElementById("fail-registration");
     if (password.value === confirmPassword.value) {
         registerBtn.disabled = true;
-        // for (let user of users) {
-        //     if (user.email === email.value) {
-        //         userEmailNotfound = false;
-        //     }
-        // }
         proceedRegister(users);
     } else {
         failConfirmPassword.innerHTML = "Ups! Your password don’t match"
@@ -72,16 +42,25 @@ async function proceedRegister(){
     const userForRegistration = { ...user, username: user.username.replace(/\s+/g, '') };
 
     try {
-        debugger
-        await registerUser(userForRegistration);    
+        const registeredUser = await registerUser(userForRegistration);
+        token = registeredUser.token  
         await loadContacts();
         await addUserToContacts(user);
         openRegistrationModal();
         resetForm();
     } catch (error) {
-        document.getElementById("fail-registration").innerHTML = Object.values(error)[0]
-        document.getElementById("fail-registration").style.color = "#FF8190";
+        registrationError(error);
     }
+}
+
+
+/**
+ * Show the error message in the registration interface
+ * @param {error} error 
+ */
+function registrationError(error) {
+    document.getElementById("fail-registration").innerHTML = Object.values(error)[0]
+    document.getElementById("fail-registration").style.color = "#FF8190";
 }
 
 
@@ -210,13 +189,16 @@ function openRegistrationModal() {
  * 
  */
 async function withoutSidebarLinks(){
-    currentUser = ['#everyone'];
-    await setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem('anonymous', true);
 }
 
 
+/**
+ * Registers a new user by sending user data to the backend.
+ * @param {Object} user - User data to be registered.
+ * @returns {Promise<Object>} - Registration response data or throws error on failure.
+ */
 async function registerUser(user) {
-    console.log(user)
     const url = 'http://127.0.0.1:8000/auth/register/';
 
     try {

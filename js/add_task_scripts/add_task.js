@@ -30,21 +30,6 @@ function loadFromAddTaskPage() {
 }
 
 
-// /**
-//  * Clears all tasks in the backend by setting the 'tasks' storage item to an empty array.
-//  * 
-//  * @async
-//  */
-// async function clearAllTasksInBackend() { //DO NOT DELETE THIS FUNCTION
-//   try {
-//     await setItem('tasks', []);
-//     console.log('All tasks have been successfully cleared.');
-//   } catch (error) {
-//     console.error('Error while clearing tasks: ', error);
-//   }
-// }
-
-
 /**
  * Validates form fields and creates a task if all validations pass. 
  * Triggers an animation indicating task addition and redirects to the board page after a delay.
@@ -174,7 +159,14 @@ function toggleContact(index, container) {
 }
 
 
-
+/**
+ * Clears the contact selection by resetting its visual state.
+ * Initializes the clicked state, updates the contact div, checkbox image, 
+ * and removes the avatar from the specified container.
+ * 
+ * @param {number} index - The unique identifier for the contact.
+ * @param {HTMLElement} container - The container element from which the avatar will be removed.
+ */
 function clearContact(index, container) {
   initializeClickedState(index);
   const contactDiv = document.getElementById(`contact${index}`);

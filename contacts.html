@@ -13,15 +13,22 @@
 
     <script defer src="./js/array.js"></script>
 
-    <link rel="stylesheet" href="./assets/templates/header_sidebar.css">
+    <link rel="stylesheet" href="./assets/header-sidebar/header_sidebar.css">
     <script src="./js/login_signup/storage.js"></script>
-    <script defer src="./assets/templates/header_sidebar.js"></script>
+    <script defer src="./assets/header-sidebar/header_sidebar.js"></script>
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 
 
 </head>
@@ -29,7 +36,7 @@
 <body onload="init(), initContacts()">
 
     <!-- Header template -->
-    <div w3-include-html="./assets/templates/header_sidebar.html"></div>
+    <div w3-include-html="./assets/header-sidebar/header_sidebar.html"></div>
 
     <!-- Content -->
     <div id="content" class="content d-flex">
@@ -81,15 +88,15 @@
                 </div>
                 <div class="popup-fields">
                     <div>
-                        <img class="x-button noselect" onclick="closePopUp()" src="./assets/img/Desktop/contacts/close.svg"
-                            alt="Close">
+                        <img class="x-button noselect" onclick="closePopUp()"
+                            src="./assets/img/Desktop/contacts/close.svg" alt="Close">
                     </div>
                     <div class="popup-section">
-                        <div id="popUpProfile" class="popup-profile noselect"><img src="./assets/img/Desktop/contacts/person.svg"
-                                alt="Profile-Image"></div>
+                        <div id="popUpProfile" class="popup-profile noselect"><img
+                                src="./assets/img/Desktop/contacts/person.svg" alt="Profile-Image"></div>
                         <form class="popup-input noselect" onsubmit="return addNewContact()">
                             <input pattern="[a-zA-Z ]+" type="text" placeholder="Name" id="popUpName" required>
-                            <input type="email" placeholder="Email" id="popUpEmail" required>
+                            <input pattern="^[\w\.\+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$" type="email" placeholder="Email" id="popUpEmail" required>
                             <input title="Only +, numbers & spaces are allowed" pattern="[+]?[\d ]*" type="tel"
                                 placeholder="Phone" id="popUpPhone" required>
                             <div id="popup-buttons" class="popup-buttons">

@@ -11,7 +11,7 @@ async function initContacts() {
  * Renders the contact list and the first letter to sort
  */
 async function renderContactList() {
-    await loadContacts()
+    await loadContacts();
     let contactList = document.getElementById('contactList');
     contactList.innerHTML = /* html */ `<div class="contact-list-padding"></div>`;
 
@@ -25,7 +25,7 @@ async function renderContactList() {
             letters.push(firstLetter);
         }
         contactList.innerHTML += returnContactListHTML(1, 0, contact['id'], contact['color'], getInitials(contact['name']), contact['name'], contact['email']);
-    })
+    });
 }
 
 
@@ -41,8 +41,8 @@ function openAddNewContact() {
     document.getElementById('popUpProfile').style.backgroundColor = '#D1D1D1';
     document.getElementById('popUpSubtitle').classList.remove('d-none');
 
-    popUpSubmit.parentNode.parentNode.onsubmit = function () { return addNewContact() };
-    popUpSubmit.previousElementSibling.onclick = function () { closePopUp() };
+    popUpSubmit.parentNode.parentNode.onsubmit = function () { return addNewContact(); };
+    popUpSubmit.previousElementSibling.onclick = function () { closePopUp(); };
 
     openPopUpAni('add-new');
 }
@@ -62,8 +62,8 @@ function openEditContact(i) {
     document.getElementById('popUpProfile').style.backgroundColor = getContactFromId(i)['color'];
     document.getElementById('popUpSubtitle').classList.add('d-none');
 
-    popUpSubmit.parentNode.parentNode.onsubmit = function () { return editContact(i) };
-    popUpSubmit.previousElementSibling.onclick = function () { deleteContact(i) };
+    popUpSubmit.parentNode.parentNode.onsubmit = function () { return editContact(i); };
+    popUpSubmit.previousElementSibling.onclick = function () { deleteContact(i); };
 
     setInput(i);
     openPopUpAni('edit');
@@ -77,13 +77,13 @@ function openEditContact(i) {
  */
 function openPopUpAni(variant) {
     popUp.classList.remove('d-none');
-    popUp.style = 'animation: blendIn 300ms ease-out;'
+    popUp.style = 'animation: blendIn 300ms ease-out;';
 
     if ((window.matchMedia("(max-width: 1000px)").matches)) {
         if (variant == 'add-new') {
             document.getElementById('popup-buttons').firstElementChild.classList.add('d-none');
         } else if (variant == 'edit') {
-            document.getElementById('popup-buttons').firstElementChild.classList.remove('d-none')
+            document.getElementById('popup-buttons').firstElementChild.classList.remove('d-none');
         }
         popUp.firstElementChild.style = 'animation: slideInPopUpMobile 300ms ease-out;';
     } else {
@@ -99,7 +99,7 @@ function openPopUpAni(variant) {
  * @param {number} i - Index of the choosen contact (optional)
  */
 function renderPopUp(variant, i) {
-    const popUpTitle = document.getElementById('popUpTitle')
+    const popUpTitle = document.getElementById('popUpTitle');
     const popUpProfile = document.getElementById('popUpProfile');
     const popUpSubmit = document.getElementById('popUpSubmit');
 
@@ -108,8 +108,8 @@ function renderPopUp(variant, i) {
         popUpProfile.innerHTML = /* html */ `<img src="./assets/img/Desktop/contacts/person.svg"
         alt="Profile-Image"></div>`;
         popUpSubmit.innerHTML = /* html */ `Create contact<img src="./assets/img/Desktop/contacts/check.svg"
-        alt="Create Contact">`
-        popUpSubmit.previousElementSibling.innerHTML = /* html */ `Cancel<img src="./assets/img/Desktop/contacts/iconoir_cancel.svg" alt="Cancel">`
+        alt="Create Contact">`;
+        popUpSubmit.previousElementSibling.innerHTML = /* html */ `Cancel<img src="./assets/img/Desktop/contacts/iconoir_cancel.svg" alt="Cancel">`;
     } else if (variant == 'edit') {
         popUpTitle.innerHTML = 'Edit contact';
         popUpProfile.innerHTML = getInitials(getContactFromId(i)['name']);
@@ -200,7 +200,7 @@ function closePopUp(submitted) {
     let popUp = document.getElementById('popUp');
 
     if (!submitted) {
-        popUp.style = 'animation: blendOut 300ms ease-out;'
+        popUp.style = 'animation: blendOut 300ms ease-out;';
 
         if ((window.matchMedia("(max-width: 1000px)").matches)) {
             popUp.firstElementChild.style = 'animation: slideOutPopUpMobile 300ms ease-out;';
@@ -225,9 +225,8 @@ function closePopUp(submitted) {
  * @param {number} i - The index of the contact to delete.
  */
 async function deleteContact(i) {
-    // deleteContactFromTasks(i);
     contacts.splice(i, 1);
-    contact = getContactFromId(i)
+    contact = getContactFromId(i);
     await saveContacts("DELETE", contact);
 
     renderContactList();
@@ -240,30 +239,14 @@ async function deleteContact(i) {
 }
 
 
+/**
+ * Finds the searched contact by the contact id
+ * @param {number} id - contact id
+ * @returns - contact object
+ */
 function getContactFromId(id) {
-    return contacts.find(contact => contact['id'] == id)
+    return contacts.find(contact => contact['id'] == id);
 }
-
-
-// /**
-//  * Removes a contact from all tasks it's assigned to.
-//  * 
-//  * @param {number} i - The index of the contact to remove from tasks.
-//  */
-// async function deleteContactFromTasks(i) {
-//     let contactToDelete = getContactFromId(i);
-//     for (let j = 0; j < tasks.length; j++) {
-//         const task = getTaskFromId(j);
-//         for (let z = 0; z < task.assigned_to.length; z++) {
-//             const contact = task.assigned_to[z].name;
-
-//             if (contact == contactToDelete.name) {
-//                 task.assigned_to.splice(z, 1);
-//                 await setItem('tasks', tasks);
-//             }
-//         }
-//     }
-// }
 
 
 /**
@@ -280,11 +263,9 @@ async function editContact(i) {
     getContactFromId(i).email = document.getElementById('popUpEmail').value;
     getContactFromId(i).phone = document.getElementById('popUpPhone').value;
 
-    let editedContact = getContactFromId(lastId)
+    let editedContact = getContactFromId(lastId);
 
-    contacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
-    let index = contacts.findIndex(c => c.id == lastId);
-    await saveContacts("PUT", editedContact)
+    await saveContacts("PUT", editedContact);
 
     closePopUp(true);
     openContact(lastId);
@@ -297,23 +278,17 @@ async function editContact(i) {
 async function addNewContact() {
     event.preventDefault();
     let newContact = {
-        "id": contacts.length,
         "color": randomColor(),
         "name": document.getElementById('popUpName').value,
         "email": document.getElementById('popUpEmail').value,
         "phone": document.getElementById('popUpPhone').value
     };
 
-    let lastId = contacts.length;
-
-    contacts.push(newContact);
-    contacts = contacts.sort((a, b) => a.name.localeCompare(b.name));
-    let index = contacts.findIndex(c => c.id == lastId);
-    await saveContacts("POST", newContact);
+    const savedContact = await postItem('contacts', newContact);
 
     closePopUp(true);
     renderContactList();
-    openContact(index);
+    openContact(savedContact.id);
     playMessageAni();
 }
 
@@ -401,6 +376,8 @@ function doNotClose(event) {
 
 /**
  * Saves the contacts-array in the back end
+ * @param {string} method - "POST", "PUT" or "DELETE"
+ * @param {object} item - the contact object
  */
 async function saveContacts(method, item) {
     if (method == "POST") {
@@ -415,8 +392,8 @@ async function saveContacts(method, item) {
 /**
  * Loads the contacts-array from the back end
  */
-async function loadContacts() {
-    let contactsArray = await getContactsArray()
+async function loadContacts(token) {
+    let contactsArray = await getContactsArray(token);
     if (Array.isArray(contactsArray)) {
         contacts = contactsArray;
     }
@@ -431,10 +408,8 @@ async function loadContacts() {
 function openContactMenu(i) {
     let contactMenu = document.getElementById('contact-menu');
 
-    contactMenu.classList.remove('d-none')
-
+    contactMenu.classList.remove('d-none');
     contactMenu.innerHTML = returnContactMenuHTML(i);
-
     contactMenu.firstElementChild.style = 'animation: slideInContactMenu 300ms ease-out';
 }
 
@@ -444,9 +419,9 @@ function openContactMenu(i) {
  */
 function closeContactMenu() {
     let contactMenu = document.getElementById('contact-menu');
-    contactMenu.firstElementChild.style = 'animation: slideOutContactMenu 300ms ease-out'
+    contactMenu.firstElementChild.style = 'animation: slideOutContactMenu 300ms ease-out';
     setTimeout(function () {
         contactMenu.classList.add('d-none');
         contactMenu.innerHTML = '';
-    }, 300)
+    }, 300);
 }

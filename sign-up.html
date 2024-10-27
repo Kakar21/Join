@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up | Join</title>
 
-    <script src="./assets/templates/header_sidebar.js"></script>
+    <script src="./assets/header-sidebar/header_sidebar.js"></script>
 
     <script src="./js/array.js"></script>
     <script src="./js/contacts.js"></script>
@@ -14,15 +14,22 @@
     <link rel="stylesheet" href="./style/login_signup.css">
     <link rel="stylesheet" href="./style/fonts.css">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 
 </head>
 
-<body onload="registerInit()">
+<body>
     <div class="login-content-body">
 
         <img class="join-logo-static-signup" src="./assets/img/Desktop/login_signup/Capa 2.svg" alt="Join">
@@ -34,7 +41,8 @@
             <div class="signUp-content">
                 <div class="login-content-header">
                     <div class="log-sign-title">
-                        <a class="noselect" href="javascript:history.back()"><img src="./assets/img/Desktop/general_elements/arrow_left/default.svg" alt="Go Back"></a>
+                        <a class="noselect" href="javascript:history.back()"><img
+                                src="./assets/img/Desktop/general_elements/arrow_left/default.svg" alt="Go Back"></a>
                         <h1>Sign up</h1>
                     </div>
                     <img src="./assets/img/Desktop/login_signup/Vector 5.svg" alt="">
@@ -52,8 +60,8 @@
                     </div>
 
                     <div class="input-password margin-top noselect">
-                        <input required id="firstPassword" type="password" onkeyup="checkConfirmPassword()" placeholder="Password"
-                            class="input-remove-border">
+                        <input required id="firstPassword" type="password" onkeyup="checkConfirmPassword()"
+                            placeholder="Password" class="input-remove-border">
                         <img src="./assets/img/Desktop/login_signup/lock.svg" id="imagePassword"
                             onclick="visibilityOnOffImage('', 'first')" alt="Schloss Icon">
                     </div>
@@ -65,13 +73,14 @@
                             onclick="visibilityOnOffImage('Confirm', 'confirm')" alt="Schloss Icon">
                     </div>
                     <!-- pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Mindestens 8 Zeichen, 1 Buchstabe, 1 Zahl, 1 Sonderzeichen, keine Leerzeichen" -->
-<!-- TODO: add pattern in passwordinputfield -->
+                    <!-- TODO: add pattern in passwordinputfield -->
                     <span class="fail-registration noselect" id="fail-registration">error</span>
 
                     <div class="privacy-policy-content-checkbox">
                         <img src="./assets/img/Desktop/login_signup/checkbox/empty.svg" id="privacyPolicyImage"
                             onclick="confirmPrivacyPolicy()" class="noselect" alt="empty checkbox">
-                        <span>I accept the <a href="./privacy-policy.html" onclick="withoutSidebarLinks()">Privacy Policy</a></span>
+                        <span>I accept the <a href="./privacy-policy.html" onclick="withoutSidebarLinks()">Privacy
+                                Policy</a></span>
                     </div>
 
                     <div class="signup-content-btn noselect">

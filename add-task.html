@@ -17,25 +17,32 @@
   <script src="./js/add_task_scripts/priorities.js"></script>
   <script src="./js/add_task_scripts/get_values.js"></script>
   <script src="./js/add_task_scripts/subtask_handling.js"></script>
-  <script src="./assets/templates/header_sidebar.js"></script>
+  <script src="./assets/header-sidebar/header_sidebar.js"></script>
   <script src="./js/add_task_scripts/clear_values.js"></script>
   <script src="./js/array.js"></script>
   <script src="./js/add_task_scripts/add_task.js"></script>
 
-  <link rel="stylesheet" href="./assets/templates/header_sidebar.css">
+  <link rel="stylesheet" href="./assets/header-sidebar/header_sidebar.css">
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 
 </head>
 
 <body onload="init(), loadAddTaskPage(), setPrio('medium')">
 
   <!-- Header template -->
-  <div w3-include-html="./assets/templates/header_sidebar.html"></div>
+  <div w3-include-html="./assets/header-sidebar/header_sidebar.html"></div>
 
   <!-- Content -->
   <div class="content">
@@ -67,8 +74,8 @@
               <span class="form-span">Assigned to</span>
               <div class="input-div-wrapper noselect">
                 <div class="input-div">
-                  <input id="add-contact-input" class="add-contact-input" type="text" placeholder="Select contacts to assign"
-                    required
+                  <input id="add-contact-input" class="add-contact-input" type="text"
+                    placeholder="Select contacts to assign" required
                     onclick="toggleDropdown('assignDropdown', 'arrowAssign')" />
                   <img class="arrow-symbol input-symbol" id="arrowAssign"
                     src="./assets/img/Desktop/add-task/arrow_dropdown_down.svg" alt="Pfeil runter"
@@ -121,7 +128,7 @@
               <div class="input-div-wrapper noselect">
                 <div class="input-div">
                   <input onclick="switchVisibility('categoryDropdown', 'arrowCategory')" id="add-category-input"
-                    class="add-category-input" type="text" placeholder="Select task category" required readonly/>
+                    class="add-category-input" type="text" placeholder="Select task category" required readonly />
 
                   <img onclick="switchVisibility('categoryDropdown', 'arrowCategory')" class="arrow-symbol input-symbol"
                     id="arrowCategory" src="./assets/img/Desktop/add-task/arrow_dropdown_down.svg" alt="Pfeil runter" />
@@ -149,7 +156,8 @@
                     <img class="plus-symbol input-symbol" id="close-symbol-subtask" onclick="clearSubtaskInput()"
                       src="./assets/img/Desktop/add-task/subtasks_icons/close.svg" alt="cancel-symbol" />
 
-                    <img class="check-symbol input-symbol" id="check-symbol-subtask" onclick="setSubtask('subtask-input', 'subTasks')"
+                    <img class="check-symbol input-symbol" id="check-symbol-subtask"
+                      onclick="setSubtask('subtask-input', 'subTasks')"
                       src="./assets/img/Desktop/add-task/subtasks_icons/check.svg" alt="check-symbol" />
                   </div>
                 </div>
@@ -164,12 +172,14 @@
           field is required</span>
 
         <div class="footer-btn-container noselect">
-          <button id="clearBtn" type="button" class="addTaskBtn clearBtn" onclick="clearForm('assigned-contacts', 'subTasks')">
+          <button id="clearBtn" type="button" class="addTaskBtn clearBtn"
+            onclick="clearForm('assigned-contacts', 'subTasks')">
             <span>Clear</span>
-            <img src="./assets/img/Desktop/add-task/cancel.svg" alt="weißer Haken" class="clearBtnImage"/>
+            <img src="./assets/img/Desktop/add-task/cancel.svg" alt="weißer Haken" class="clearBtnImage" />
           </button>
 
-          <button id="createTaskBtn" type="submit" class="addTaskBtn createBtn" onclick="validateAndCreateTask('assigned-contacts', 'subTasks');">
+          <button id="createTaskBtn" type="submit" class="addTaskBtn createBtn"
+            onclick="validateAndCreateTask('assigned-contacts', 'subTasks');">
             <span>Create Task</span>
             <img src="./assets/img/Desktop/add-task/check.svg" alt="weißer Haken" />
           </button>

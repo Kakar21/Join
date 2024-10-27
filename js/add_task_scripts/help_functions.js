@@ -21,17 +21,28 @@ function updateClickedState(index, value) {
 }
 
 
+/**
+ * Search the clickstate of assigned contacts based on the id
+ * @param {number} id - clickstate id
+ * @returns - clickstate object
+ */
 function getClickStateById(id) {
   const stateObject = clickedStates.find(state => state.hasOwnProperty(id));
   return stateObject ? stateObject[id] : undefined;
 }
 
+
+/**
+ * Sets the clickstate of the assigned contactwith the same id based on the value
+ * @param {number} id - clickstate id
+ * @param {boolean} value - is clicked or not
+ */
 function setClickStateById(id, value) {
   clickedStates = clickedStates.map(state => {
       if (state.hasOwnProperty(id)) {
-          return { [id]: value }; // Ändere den Wert für das spezifische id
+          return { [id]: value };
       }
-      return state; // Unveränderte Einträge zurückgeben
+      return state;
   });
 }
 

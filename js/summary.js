@@ -1,4 +1,5 @@
-let summaryData = {}
+let summaryData = {};
+
 
 /**
  * Initializes the summary.html
@@ -8,22 +9,8 @@ async function initSummary() {
         await playGreetingAni();
     }
     await getSummaryData();
-    // await setTasks();
     renderSummaryBoard();
     renderSummaryGreeting();
-}
-
-
-/**
- * Loads the tasks-array from Back End
- */
-async function setTasks() {
-    let tasksToSet = await getTasksArray();
-    if (Array.isArray(tasksToSet)) {
-        tasks = tasksToSet;
-    } else {
-        tasks = [];
-    };
 }
 
 
@@ -34,7 +21,7 @@ function renderSummaryBoard() {
     document.getElementById('toDoNum').innerHTML = summaryData['todo_count'];
     document.getElementById('doneNum').innerHTML = summaryData['done_count'];
     document.getElementById('urgentNum').innerHTML = summaryData['urgent_count'];
-    document.getElementById('deadlineDate').innerHTML = summaryData['next_deadline'] || 'No upcoming deadlines'
+    document.getElementById('deadlineDate').innerHTML = summaryData['next_deadline'] || 'No upcoming deadlines';
     document.getElementById('tasksNum').innerHTML = summaryData['tasks_count'];
     document.getElementById('inProgressNum').innerHTML = summaryData['in_progress_count'];
     document.getElementById('awaitFeedbackNum').innerHTML = summaryData['awaiting_feedback_count'];
@@ -70,12 +57,11 @@ async function loadUserGreeting(greet) {
     let nameElement = greet.lastElementChild;
     let timeElement = greet.firstElementChild;
     try {
-        let currentUser = JSON.parse(await getItem("currentUser"));
-        if (!currentUser['name']) {
+        if (!currentUser['username']) {
             nameElement.remove();
             timeElement.innerHTML = timeElement.innerHTML.slice(0, -1);
         } else {
-            nameElement.innerHTML = currentUser['name'];
+            nameElement.innerHTML = currentUser['username'];
         };
     } catch (e) {
         console.error("Loading error:", e);
@@ -98,51 +84,6 @@ async function playGreetingAni() {
         localStorage.setItem("greetingAniPlayed", "true");
     } else {
         greeting.classList.add('d-none');
-    };
-}
-
-
-// /**
-//  *  Searches in the tasks-array for matches in the subcategory
-//  * 
-//  * @param {string} subcategory - JSON Key in tasks-array 
-//  * @param {string} match - JSON Value in tasks-array
-//  * @returns - count of matches
-//  */
-// function findTaskQuantitys(subcategory, match) {
-//     let count = 0;
-//     for (let i = 0; i < tasks.length; i++) {
-//         const element = getTaskFromId(i);
-
-//         if (element[subcategory] == match) {
-//             count++;
-//         }
-//     };
-//     return count;
-// }
-
-
-/**
- * Replaces the date in the deadline box
- */
-function renderDeadlineBox() {
-    let dates = [];
-    let today = new Date();
-    let deadlineDate = document.getElementById('deadlineDate');
-
-    for (let i = 0; i < tasks.length; i++) {
-        let dateParts = getTaskFromId(i)['due_date'].split('/');
-        let taskDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-
-        if (taskDate > today) {
-            dates.push(getTaskFromId(i)['due_date']);
-        }
-    };
-
-    if (dates.length >= 1) {
-        deadlineDate.innerHTML = sortDates(dates);
-    } else {
-        deadlineDate.innerHTML = 'No upcoming deadlines';
     };
 }
 

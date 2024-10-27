@@ -27,15 +27,22 @@
     <script src="./js/add_task_scripts/add_task.js"></script>
     <script src="./js/board_eventlistener.js"></script>
 
-    <link rel="stylesheet" href="./assets/templates/header_sidebar.css">
+    <link rel="stylesheet" href="./assets/header-sidebar/header_sidebar.css">
     <script src="./js/login_signup/storage.js"></script>
-    <script src="./assets/templates/header_sidebar.js"></script>
+    <script src="./assets/header-sidebar/header_sidebar.js"></script>
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <!-- SVG -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon/logo-white.svg" media="(prefers-color-scheme: dark)">
+  <!-- 96x96 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-96.png" media="(prefers-color-scheme: light)" sizes="96x96">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-96.png" media="(prefers-color-scheme: dark)" sizes="96x96">
+  <!-- 32x32 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-32.png" media="(prefers-color-scheme: light)" sizes="32x32">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-32.png" media="(prefers-color-scheme: dark)" sizes="32x32">
+  <!-- 16x16 -->
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-black-16.png" media="(prefers-color-scheme: light)" sizes="16x16">
+  <link rel="icon" type="image/png" href="./assets/favicon/logo-white-16.png" media="(prefers-color-scheme: dark)" sizes="16x16">
 
 </head>
 
@@ -105,7 +112,8 @@
                                                 alt="Pfeil runter"
                                                 onclick="toggleDropdown('assignDropdown', 'arrowAssign')" />
                                         </div>
-                                        <div class="assignDropdown-popup addTaskPopupDropdown d-none" id="assignDropdown"></div>
+                                        <div class="assignDropdown-popup addTaskPopupDropdown d-none"
+                                            id="assignDropdown"></div>
                                     </div>
                                     <div class="assigned-contacts " id="assigned-contacts"></div>
 
@@ -162,7 +170,7 @@
                                             <input
                                                 onclick="switchVisibility('categoryDropdown', 'arrowCategory'), generateCategoryOptions()"
                                                 id="add-category-input" class="add-category-input" type="text"
-                                                placeholder="Select task category" required readonly/>
+                                                placeholder="Select task category" required readonly />
 
                                             <img onclick="switchVisibility('categoryDropdown', 'arrowCategory'), generateCategoryOptions()"
                                                 class="arrow-symbol input-symbol" id="arrowCategory"
@@ -238,7 +246,7 @@
     </div>
 
     <!-- Header template -->
-    <div w3-include-html="./assets/templates/header_sidebar.html"></div>
+    <div w3-include-html="./assets/header-sidebar/header_sidebar.html"></div>
 
     <!-- Content -->
     <div id="content" class="content">
@@ -308,8 +316,9 @@
             <div>
                 <div class="toDoListCategories">
                     <p>To do</p>
-                    <a class="hoverPointer AddTaskButton noselect" onclick="openAddTaskMenu('ToDo'), loadAddTaskPage(), setPrio('medium')"><svg
-                            width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <a class="hoverPointer AddTaskButton noselect"
+                        onclick="openAddTaskMenu('ToDo'), loadAddTaskPage(), setPrio('medium')"><svg width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2" />
                             <path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
                             <path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
@@ -325,8 +334,8 @@
                 <div class="toDoListCategories">
                     <p>In progress</p>
                     <a class="hoverPointer AddTaskButton noselect"
-                        onclick="openAddTaskMenu('InProgress'), loadAddTaskPage(), setPrio('medium')"><svg width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        onclick="openAddTaskMenu('InProgress'), loadAddTaskPage(), setPrio('medium')"><svg width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2" />
                             <path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
                             <path d="M16 12.0754L8 12.0754" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
@@ -342,7 +351,8 @@
             <div>
                 <div class="toDoListCategories">
                     <p>Await feedback</p>
-                    <a class="hoverPointer AddTaskButton noselect" onclick="openAddTaskMenu('AwaitFeedback'), loadAddTaskPage(), setPrio('medium')">
+                    <a class="hoverPointer AddTaskButton noselect"
+                        onclick="openAddTaskMenu('AwaitFeedback'), loadAddTaskPage(), setPrio('medium')">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="1" width="22" height="22" rx="7" stroke="#2A3647" stroke-width="2" />
                             <path d="M12 8V16" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />

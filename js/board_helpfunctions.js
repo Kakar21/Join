@@ -115,6 +115,13 @@ function addTaskIcon(id, x) {
    }
 }
 
+
+/**
+ * Finds the searched contact from the task assigned tab
+ * @param {number} taskId 
+ * @param {number} contactId 
+ * @returns - Contact object
+ */
 function getAssignedContactsFromId(taskId, contactId) {
    return getTaskFromId(taskId).assigned_to.find(contact => contact['id'] == contactId)
  }
@@ -242,6 +249,5 @@ function sortAndFilterCards(inputId) {
  * Hides the "No Tasks Found"-Message
  */
 function RemoveNoTaksFound() {
-   console.log('test');
    document.getElementById('allertNoTasksFoundContainer').innerHTML = '';
 }

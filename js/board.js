@@ -66,7 +66,6 @@ function renderTasks() {
 }
 
 
-
 /**
  * Renders a task card and adds it to the appropriate task container based on its status.
  *
@@ -86,10 +85,15 @@ function renderTaskCard(taskStatus, taskIndex) {
 }
 
 
-
+/**
+ * Find the searched task by the task id
+ * @param {number} id 
+ * @returns - task object
+ */
 function getTaskFromId(id) {
   return tasks.find(task => task['id'] == id)
 }
+
 
 /**
  * Opens and displays a detailed card for a task.
