@@ -18,20 +18,20 @@ async function registerInit() {
 
 
 /**
- * Control the register and load User
- *
- * @param {string} ok - string from the function in the registry
- */
-async function loadUsers(ok) {
-    try {
-        users = JSON.parse(await getItem("users"));
-        if (ok === "successfully") {
-            openRegistrationModal();
-        }
-    } catch (e) {
-        console.error("Loading error:", e);
-    }
-}
+//  * Control the register and load User
+//  *
+//  * @param {string} ok - string from the function in the registry
+//  */
+// async function loadUsers(ok) {
+//     try {
+//         users = JSON.parse(await getItem("users"));
+//         if (ok === "successfully") {
+//             openRegistrationModal();
+//         }
+//     } catch (e) {
+//         console.error("Loading error:", e);
+//     }
+// }
 
 
 /**
@@ -39,16 +39,17 @@ async function loadUsers(ok) {
  *
  */
 async function register() {
-    let failConfirmPassword = document.getElementById("fail-confirm-password");
+    let failConfirmPassword = document.getElementById("fail-registration");
     if (password.value === confirmPassword.value) {
         registerBtn.disabled = true;
-        for (let user of users) {
-            if (user.email === email.value) {
-                userEmailNotfound = false;
-            }
-        }
-        isUserEmailNotfound(users);
+        // for (let user of users) {
+        //     if (user.email === email.value) {
+        //         userEmailNotfound = false;
+        //     }
+        // }
+        proceedRegister(users);
     } else {
+        failConfirmPassword.innerHTML = "Ups! Your password don’t match"
         failConfirmPassword.style.color = "#FF8190";
     }
 }
@@ -59,16 +60,27 @@ async function register() {
  * 
  * @param {Array} users - The Array of user data
  */
-async function isUserEmailNotfound(users){
-    if (userEmailNotfound == true) {
-        generateArrayUsers();
+async function proceedRegister(){
+
+    const user = {
+        username: userName.value,
+        email: email.value,
+        password: password.value,
+        repeated_password: confirmPassword.value,
+        color: randomColor()
+    };
+    const userForRegistration = { ...user, username: user.username.replace(/\s+/g, '') };
+
+    try {
+        debugger
+        await registerUser(userForRegistration);    
         await loadContacts();
-        await addUserToContacts();
-        await setItem("users", JSON.stringify(users));
-        await loadUsers("successfully");
+        await addUserToContacts(user);
+        openRegistrationModal();
         resetForm();
-    } else {
-        document.getElementById("fail-confirm-password").style.color = "#FF8190";
+    } catch (error) {
+        document.getElementById("fail-registration").innerHTML = Object.values(error)[0]
+        document.getElementById("fail-registration").style.color = "#FF8190";
     }
 }
 
@@ -151,9 +163,10 @@ function visibilityOnOffImage(Which, which) {
 function checkConfirmPassword() {
     let firstPassword = password.value.trim();
     let secondPassword = confirmPassword.value.trim();
-    let failConfirmPassword = document.getElementById("fail-confirm-password");
+    let failConfirmPassword = document.getElementById("fail-registration");
 
     if (!firstPassword.startsWith(secondPassword)) {
+        failConfirmPassword.innerHTML = "Ups! Your password don’t match"
         failConfirmPassword.style.color = "#FF8190";
     } else {
         failConfirmPassword.style.color = "transparent";
@@ -199,4 +212,32 @@ function openRegistrationModal() {
 async function withoutSidebarLinks(){
     currentUser = ['#everyone'];
     await setItem("currentUser", JSON.stringify(currentUser));
+}
+
+
+async function registerUser(user) {
+    console.log(user)
+    const url = 'http://127.0.0.1:8000/auth/register/';
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error during registration:', error);
+        throw error;
+    }
 }

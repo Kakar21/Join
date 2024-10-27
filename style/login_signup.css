@@ -471,7 +471,7 @@ body {
     align-items: flex-start;
 }
 
-.fail-confirm-password {
+.fail-registration {
     color: transparent;
     align-self: stretch;
     font-family: Poppins;

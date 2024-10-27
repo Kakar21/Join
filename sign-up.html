@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="input-password margin-top noselect">
-                        <input required id="firstPassword" type="password" placeholder="Password"
+                        <input required id="firstPassword" type="password" onkeyup="checkConfirmPassword()" placeholder="Password"
                             class="input-remove-border">
                         <img src="./assets/img/Desktop/login_signup/lock.svg" id="imagePassword"
                             onclick="visibilityOnOffImage('', 'first')" alt="Schloss Icon">
@@ -66,7 +66,7 @@
                     </div>
                     <!-- pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Mindestens 8 Zeichen, 1 Buchstabe, 1 Zahl, 1 Sonderzeichen, keine Leerzeichen" -->
 <!-- TODO: add pattern in passwordinputfield -->
-                    <span class="fail-confirm-password noselect" id="fail-confirm-password">Ups! your password don’t match</span>
+                    <span class="fail-registration noselect" id="fail-registration">error</span>
 
                     <div class="privacy-policy-content-checkbox">
                         <img src="./assets/img/Desktop/login_signup/checkbox/empty.svg" id="privacyPolicyImage"

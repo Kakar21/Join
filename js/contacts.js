@@ -225,7 +225,7 @@ function closePopUp(submitted) {
  * @param {number} i - The index of the contact to delete.
  */
 async function deleteContact(i) {
-    deleteContactFromTasks(i);
+    // deleteContactFromTasks(i);
     contacts.splice(i, 1);
     contact = getContactFromId(i)
     await saveContacts("DELETE", contact);
@@ -245,25 +245,25 @@ function getContactFromId(id) {
 }
 
 
-/**
- * Removes a contact from all tasks it's assigned to.
- * 
- * @param {number} i - The index of the contact to remove from tasks.
- */
-async function deleteContactFromTasks(i) {
-    let contactToDelete = getContactFromId(i);
-    for (let j = 0; j < tasks.length; j++) {
-        const task = getTaskFromId(j);
-        for (let z = 0; z < task.assigned_to.length; z++) {
-            const contact = task.assigned_to[z].name;
+// /**
+//  * Removes a contact from all tasks it's assigned to.
+//  * 
+//  * @param {number} i - The index of the contact to remove from tasks.
+//  */
+// async function deleteContactFromTasks(i) {
+//     let contactToDelete = getContactFromId(i);
+//     for (let j = 0; j < tasks.length; j++) {
+//         const task = getTaskFromId(j);
+//         for (let z = 0; z < task.assigned_to.length; z++) {
+//             const contact = task.assigned_to[z].name;
 
-            if (contact == contactToDelete.name) {
-                task.assigned_to.splice(z, 1);
-                await setItem('tasks', tasks);
-            }
-        }
-    }
-}
+//             if (contact == contactToDelete.name) {
+//                 task.assigned_to.splice(z, 1);
+//                 await setItem('tasks', tasks);
+//             }
+//         }
+//     }
+// }
 
 
 /**
@@ -321,12 +321,12 @@ async function addNewContact() {
 /**
  * Adds new registered user to the contact list
  */
-async function addUserToContacts() {
+async function addUserToContacts(user) {
     let newContact = {
-        "color": randomColor(),
-        "name": userName.value,
-        "email": email.value,
-        "phone": ''
+        "color": user.color,
+        "name": user.username,
+        "email": user.email,
+        "phone": '+49 1111 111 11 1'
     };
 
     contacts.push(newContact);

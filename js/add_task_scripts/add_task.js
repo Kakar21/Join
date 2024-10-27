@@ -30,19 +30,19 @@ function loadFromAddTaskPage() {
 }
 
 
-/**
- * Clears all tasks in the backend by setting the 'tasks' storage item to an empty array.
- * 
- * @async
- */
-async function clearAllTasksInBackend() { //DO NOT DELETE THIS FUNCTION
-  try {
-    await setItem('tasks', []);
-    console.log('All tasks have been successfully cleared.');
-  } catch (error) {
-    console.error('Error while clearing tasks: ', error);
-  }
-}
+// /**
+//  * Clears all tasks in the backend by setting the 'tasks' storage item to an empty array.
+//  * 
+//  * @async
+//  */
+// async function clearAllTasksInBackend() { //DO NOT DELETE THIS FUNCTION
+//   try {
+//     await setItem('tasks', []);
+//     console.log('All tasks have been successfully cleared.');
+//   } catch (error) {
+//     console.error('Error while clearing tasks: ', error);
+//   }
+// }
 
 
 /**
