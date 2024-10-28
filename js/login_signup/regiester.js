@@ -6,7 +6,9 @@ let password = document.getElementById("firstPassword");
 let confirmPassword = document.getElementById("confirmPassword");
 let registerBtn = document.getElementById("registerBtn");
 let policyImage = document.getElementById("privacyPolicyImage");
-let token = ''
+let emptyPolicyImagePath = "assets/img/Desktop/login_signup/checkbox/empty.svg";
+let errorMessage = document.getElementById("fail-registration");
+let token = '';
 
 
 /**
@@ -14,15 +16,29 @@ let token = ''
  *
  */
 async function register() {
-    let failConfirmPassword = document.getElementById("fail-registration");
     if (password.value === confirmPassword.value) {
-        registerBtn.disabled = true;
         proceedRegister(users);
     } else {
-        failConfirmPassword.innerHTML = "Ups! Your password don’t match"
-        failConfirmPassword.style.color = "#FF8190";
+        errorMessage.innerHTML = "Ups! Your passwords don’t match.";
+        errorMessage.style.color = "#FF8190";
     }
 }
+
+
+/**
+ * Checks the form for validity and empty inputs then activates/disables the submit button
+ */
+function checkFormCompletion() {
+    const form = document.getElementById('registerForm');
+    if (checkPrivacyPolicy() && form.checkValidity()) {
+        registerBtn.disabled = false;
+    } else {
+        registerBtn.disabled = true;
+    }
+}
+document.querySelectorAll('#registerForm input').forEach(element => {
+    element.addEventListener('input', checkFormCompletion);
+});
 
 
 /**
@@ -30,7 +46,7 @@ async function register() {
  * 
  * @param {Array} users - The Array of user data
  */
-async function proceedRegister(){
+async function proceedRegister() {
 
     const user = {
         username: userName.value,
@@ -43,7 +59,7 @@ async function proceedRegister(){
 
     try {
         const registeredUser = await registerUser(userForRegistration);
-        token = registeredUser.token  
+        token = registeredUser.token;
         await loadContacts();
         await addUserToContacts(user);
         openRegistrationModal();
@@ -59,8 +75,8 @@ async function proceedRegister(){
  * @param {error} error 
  */
 function registrationError(error) {
-    document.getElementById("fail-registration").innerHTML = Object.values(error)[0]
-    document.getElementById("fail-registration").style.color = "#FF8190";
+    errorMessage.innerHTML = Object.values(error)[0];
+    errorMessage.style.color = "#FF8190";
 }
 
 
@@ -87,8 +103,9 @@ function resetForm() {
     email.value = "";
     password.value = "";
     confirmPassword.value = "";
-    registerBtn.disabled = false;
     policyImage.src = "assets/img/Desktop/login_signup/checkbox/empty.svg";
+    errorMessage.innerHTML = "";
+    checkFormCompletion();
 }
 
 
@@ -142,13 +159,12 @@ function visibilityOnOffImage(Which, which) {
 function checkConfirmPassword() {
     let firstPassword = password.value.trim();
     let secondPassword = confirmPassword.value.trim();
-    let failConfirmPassword = document.getElementById("fail-registration");
 
-    if (!firstPassword.startsWith(secondPassword)) {
-        failConfirmPassword.innerHTML = "Ups! Your password don’t match"
-        failConfirmPassword.style.color = "#FF8190";
+    if (!firstPassword.startsWith(secondPassword) || !secondPassword.startsWith(firstPassword)) {
+        errorMessage.innerHTML = "Ups! Your passwords don’t match.";
+        errorMessage.style.color = "#FF8190";
     } else {
-        failConfirmPassword.style.color = "transparent";
+        errorMessage.style.color = "transparent";
     }
 }
 
@@ -158,15 +174,25 @@ function checkConfirmPassword() {
  *
  */
 function confirmPrivacyPolicy() {
-    let emptyImagePath = "assets/img/Desktop/login_signup/checkbox/empty.svg";
-
-    if (policyImage.src.endsWith(emptyImagePath)) {
+    if (policyImage.src.endsWith(emptyPolicyImagePath)) {
         policyImage.src = "assets/img/Desktop/login_signup/checkbox/checked.svg";
-        registerBtn.disabled = false;
     } else {
-        policyImage.src = emptyImagePath;
-        registerBtn.disabled = true;
+        policyImage.src = emptyPolicyImagePath;
     }
+    checkFormCompletion();
+}
+
+/**
+ * Checks if privacy policy is ticked 
+ * @returns - boolean
+ */
+function checkPrivacyPolicy() {
+    if (policyImage.src.endsWith(emptyPolicyImagePath)) {
+        return false;
+    } else {
+        return true;
+    }
+
 }
 
 
@@ -188,7 +214,7 @@ function openRegistrationModal() {
  * legal-notice and privacy policy for everyone (without Login)
  * 
  */
-async function withoutSidebarLinks(){
+async function withoutSidebarLinks() {
     localStorage.setItem('anonymous', true);
 }
 
@@ -212,7 +238,7 @@ async function registerUser(user) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw errorData
+            throw errorData;
         }
 
         const data = await response.json();

@@ -48,7 +48,7 @@
                     <img src="./assets/img/Desktop/login_signup/Vector 5.svg" alt="">
                 </div>
 
-                <form onsubmit="register(); return false;" class="signUp-content-form">
+                <form id="registerForm" onsubmit="register(); return false;" class="signUp-content-form">
                     <div class="input-name noselect">
                         <input required id="userName" type="text" placeholder="Name" class="input-remove-border">
                         <img src="./assets/img/Desktop/login_signup/person.svg" alt="Name Icon">
@@ -72,8 +72,6 @@
                         <img src="./assets/img/Desktop/login_signup/lock.svg" id="imageConfirmPassword"
                             onclick="visibilityOnOffImage('Confirm', 'confirm')" alt="Schloss Icon">
                     </div>
-                    <!-- pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$" title="Mindestens 8 Zeichen, 1 Buchstabe, 1 Zahl, 1 Sonderzeichen, keine Leerzeichen" -->
-                    <!-- TODO: add pattern in passwordinputfield -->
                     <span class="fail-registration noselect" id="fail-registration">error</span>
 
                     <div class="privacy-policy-content-checkbox">
