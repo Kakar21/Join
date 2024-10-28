@@ -160,7 +160,7 @@ function checkConfirmPassword() {
     let firstPassword = password.value.trim();
     let secondPassword = confirmPassword.value.trim();
 
-    if (!firstPassword.startsWith(secondPassword) || !secondPassword.startsWith(firstPassword)) {
+    if (!firstPassword.startsWith(secondPassword) && firstPassword || !secondPassword.startsWith(firstPassword) && secondPassword) {
         errorMessage.innerHTML = "Ups! Your passwords don’t match.";
         errorMessage.style.color = "#FF8190";
     } else {
